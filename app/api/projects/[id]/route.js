@@ -1,10 +1,9 @@
-// app/api/projects/[id]/route.js
+// src/app/api/projects/[id]/route.js
 import connectDB from '@/lib/mongodb'
 import Project from '@/models/Project'
-import { getAuthFromRequest, unauthorizedResponse } from '@/lib/auth'
+import { getAuthFromRequest } from '@/lib/auth'
 import { deleteFromCloudinary } from '@/lib/cloudinary'
 
-// GET /api/projects/:id — public
 export async function GET(req, { params }) {
   try {
     await connectDB()
@@ -16,11 +15,9 @@ export async function GET(req, { params }) {
   }
 }
 
-// PUT /api/projects/:id — admin only
 export async function PUT(req, { params }) {
   const auth = getAuthFromRequest(req)
-  if (!auth) return unauthorizedResponse()
-
+  if (!auth) return Response.json({ error: 'Unauthorized' }, { status: 401 })
   try {
     await connectDB()
     const body = await req.json()
@@ -32,21 +29,14 @@ export async function PUT(req, { params }) {
   }
 }
 
-// DELETE /api/projects/:id — admin only
 export async function DELETE(req, { params }) {
   const auth = getAuthFromRequest(req)
-  if (!auth) return unauthorizedResponse()
-
+  if (!auth) return Response.json({ error: 'Unauthorized' }, { status: 401 })
   try {
     await connectDB()
     const project = await Project.findById(params.id)
     if (!project) return Response.json({ error: 'Not found' }, { status: 404 })
-
-    // Clean up Cloudinary image if exists
-    if (project.imagePublicId) {
-      await deleteFromCloudinary(project.imagePublicId)
-    }
-
+    if (project.imagePublicId) await deleteFromCloudinary(project.imagePublicId)
     await project.deleteOne()
     return Response.json({ message: 'Deleted' })
   } catch {
@@ -54,7 +44,6 @@ export async function DELETE(req, { params }) {
   }
 }
 
-// PATCH /api/projects/:id/click — track project clicks
 export async function PATCH(req, { params }) {
   try {
     await connectDB()

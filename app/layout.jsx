@@ -4,7 +4,6 @@ import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import theme from '@/theme/theme';
 import CustomCursor from '@/components/layout/CustomCursor';
-import ParticlesBackground from '@/components/particles/ParticlesBackground';
 import connectDB from '@/lib/mongodb'
 
 export const metadata = {
@@ -20,7 +19,7 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
-  connectDB()
+  
   return (
     <html lang="en">
       <head>
@@ -33,8 +32,6 @@ export default function RootLayout({ children }) {
       </head>
       <body style={{ backgroundColor: '#0a0a0a' }}>
   
-  {/* ✅ GLOBAL PARTICLES (ONE TIME ONLY) */}
-  <ParticlesBackground />
 
   <AppRouterCacheProvider>
     <ThemeProvider theme={theme}>

@@ -1,11 +1,11 @@
-// app/api/skills/[id]/route.js
+// src/app/api/skills/[id]/route.js
 import connectDB from '@/lib/mongodb'
 import Skill from '@/models/Skill'
-import { getAuthFromRequest, unauthorizedResponse } from '@/lib/auth'
+import { getAuthFromRequest } from '@/lib/auth'
 
 export async function PUT(req, { params }) {
   const auth = getAuthFromRequest(req)
-  if (!auth) return unauthorizedResponse()
+  if (!auth) return Response.json({ error: 'Unauthorized' }, { status: 401 })
   try {
     await connectDB()
     const body = await req.json()
@@ -19,7 +19,7 @@ export async function PUT(req, { params }) {
 
 export async function DELETE(req, { params }) {
   const auth = getAuthFromRequest(req)
-  if (!auth) return unauthorizedResponse()
+  if (!auth) return Response.json({ error: 'Unauthorized' }, { status: 401 })
   try {
     await connectDB()
     await Skill.findByIdAndDelete(params.id)

@@ -162,14 +162,24 @@ const SERVICES = [
 ];
 
 // ─── Particles ───────────────────────────────────────────────────────────────
-const PARTICLES = Array.from({ length: 16 }, (_, i) => ({
-  id: i,
-  top:  `${Math.random() * 100}%`,
-  left: `${Math.random() * 100}%`,
-  size: `${2 + Math.random() * 3}px`,
-  delay:`${Math.random() * 7}s`,
-  dur:  `${5 + Math.random() * 9}s`,
-}));
+const PARTICLES = [
+  { id:0,  top:'5%',  left:'8%',  size:'3px', delay:'0s',   dur:'6s'  },
+  { id:1,  top:'12%', left:'72%', size:'2px', delay:'1.2s', dur:'8s'  },
+  { id:2,  top:'22%', left:'45%', size:'4px', delay:'0.5s', dur:'7s'  },
+  { id:3,  top:'38%', left:'88%', size:'2px', delay:'2.1s', dur:'9s'  },
+  { id:4,  top:'45%', left:'15%', size:'3px', delay:'0.8s', dur:'5s'  },
+  { id:5,  top:'55%', left:'60%', size:'5px', delay:'1.7s', dur:'11s' },
+  { id:6,  top:'62%', left:'32%', size:'2px', delay:'3.0s', dur:'8s'  },
+  { id:7,  top:'70%', left:'90%', size:'3px', delay:'0.3s', dur:'6s'  },
+  { id:8,  top:'78%', left:'20%', size:'4px', delay:'2.5s', dur:'10s' },
+  { id:9,  top:'85%', left:'55%', size:'2px', delay:'1.0s', dur:'7s'  },
+  { id:10, top:'90%', left:'40%', size:'3px', delay:'0.6s', dur:'9s'  },
+  { id:11, top:'18%', left:'28%', size:'2px', delay:'4.0s', dur:'13s' },
+  { id:12, top:'30%', left:'75%', size:'4px', delay:'1.5s', dur:'8s'  },
+  { id:13, top:'50%', left:'82%', size:'2px', delay:'2.8s', dur:'6s'  },
+  { id:14, top:'65%', left:'12%', size:'3px', delay:'3.5s', dur:'7s'  },
+  { id:15, top:'75%', left:'50%', size:'2px', delay:'1.9s', dur:'12s' },
+]
 
 // ─── Marquee items ────────────────────────────────────────────────────────────
 const MARQUEE_ITEMS = ['Web Development','Frontend Development','SEO Expert','UI/UX Design','Backend Development','Local SEO','React','Next.js','Node.js','MongoDB','Figma','Tailwind CSS'];

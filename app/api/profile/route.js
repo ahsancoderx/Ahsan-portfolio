@@ -1,37 +1,29 @@
-// app/api/profile/route.js
+// src/app/api/profile/route.js
 import connectDB from '@/lib/mongodb'
 import Profile from '@/models/Profile'
-import { getAuthFromRequest, unauthorizedResponse } from '@/lib/auth'
+import { getAuthFromRequest } from '@/lib/auth'
 
-// GET /api/profile — public
 export async function GET() {
   try {
     await connectDB()
     const profile = await Profile.findOne().sort({ createdAt: -1 })
     return Response.json(profile || {})
   } catch (err) {
-    return Response.json({ error: 'Failed to fetch profile' }, { status: 500 })
+    console.error('[GET /api/profile]', err.message)
+    return Response.json({})
   }
 }
 
-// PUT /api/profile — admin only
 export async function PUT(req) {
   const auth = getAuthFromRequest(req)
-  if (!auth) return unauthorizedResponse()
-
+  if (!auth) return Response.json({ error: 'Unauthorized' }, { status: 401 })
   try {
     await connectDB()
     const body = await req.json()
-
-    // Upsert — create if doesn't exist, update otherwise
-    const profile = await Profile.findOneAndUpdate(
-      {},
-      { ...body },
-      { new: true, upsert: true, runValidators: true }
-    )
-
+    const profile = await Profile.findOneAndUpdate({}, { ...body }, { new: true, upsert: true, runValidators: true })
     return Response.json(profile)
   } catch (err) {
+    console.error('[PUT /api/profile]', err.message)
     return Response.json({ error: 'Failed to update profile' }, { status: 500 })
   }
 }

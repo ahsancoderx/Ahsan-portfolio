@@ -1,21 +1,18 @@
-// app/api/upload/route.js
-import { getAuthFromRequest, unauthorizedResponse } from '@/lib/auth'
+// src/app/api/upload/route.js
+import { getAuthFromRequest } from '@/lib/auth'
 import { uploadToCloudinary } from '@/lib/cloudinary'
 
 export async function POST(req) {
   const auth = getAuthFromRequest(req)
-  if (!auth) return unauthorizedResponse()
+  if (!auth) return Response.json({ error: 'Unauthorized' }, { status: 401 })
 
   try {
     const formData = await req.formData()
     const file = formData.get('file')
     const folder = formData.get('folder') || 'portfolio'
 
-    if (!file) {
-      return Response.json({ error: 'No file provided' }, { status: 400 })
-    }
+    if (!file) return Response.json({ error: 'No file provided' }, { status: 400 })
 
-    // Convert file to buffer
     const bytes = await file.arrayBuffer()
     const buffer = Buffer.from(bytes)
 
@@ -31,12 +28,7 @@ export async function POST(req) {
       format: result.format,
     })
   } catch (err) {
-    console.error('Upload error:', err)
+    console.error('[POST /api/upload]', err.message)
     return Response.json({ error: 'Upload failed' }, { status: 500 })
   }
-}
-
-// Needed for large file uploads
-export const config = {
-  api: { bodyParser: false },
 }

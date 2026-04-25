@@ -1,6 +1,5 @@
-// app/api/auth/authadmin/route.js
-// One-time admin seed endpoint — disable after first use in production
-
+// src/app/api/auth/authadmin/route.js
+// One-time admin seed — POST once to create first admin, then protect or delete
 import connectDB from '@/lib/mongodb'
 import User from '@/models/User'
 
@@ -8,7 +7,6 @@ export async function POST(req) {
   try {
     await connectDB()
 
-    // Only allow if no admin exists
     const existingAdmin = await User.findOne({ role: 'admin' })
     if (existingAdmin) {
       return Response.json({ error: 'Admin already exists' }, { status: 409 })
@@ -20,13 +18,9 @@ export async function POST(req) {
     }
 
     const admin = await User.create({ name, email, password, role: 'admin' })
-
-    return Response.json({
-      message: 'Admin created successfully',
-      email: admin.email,
-    })
+    return Response.json({ message: 'Admin created successfully', email: admin.email })
   } catch (err) {
-    console.error('Setup error:', err)
+    console.error('[POST /api/auth/authadmin]', err.message)
     return Response.json({ error: 'Internal server error' }, { status: 500 })
   }
 }

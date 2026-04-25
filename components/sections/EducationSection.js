@@ -16,10 +16,7 @@ import GTranslateIcon    from '@mui/icons-material/GTranslate';
 import { motion, useInView } from 'framer-motion';
 import dynamic from 'next/dynamic';
 
-const ParticlesBackground = dynamic(
-  () => import('@/components/particles/ParticlesBackground'),
-  { ssr: false }
-);
+
 
 /* ─── DATA ─────────────────────────────────────────────── */
 const EDUCATION = [
@@ -256,8 +253,6 @@ export default function EducationSection() {
         overflow: 'hidden',
       }}
     >
-      {/* particles.js canvas */}
-      <ParticlesBackground id="edu-particles" preset="network" />
 
       {/* Content above particles — same Container as ContactSection */}
       <Box sx={{ position: 'relative', zIndex: 1 }}>

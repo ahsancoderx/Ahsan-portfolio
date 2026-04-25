@@ -1,24 +1,27 @@
-// app/api/blogs/route.js
+// src/app/api/blogs/route.js
 import connectDB from '@/lib/mongodb'
 import Blog from '@/models/Blog'
-import { getAuthFromRequest, unauthorizedResponse } from '@/lib/auth'
+import { getAuthFromRequest } from '@/lib/auth'
 
 export async function GET(req) {
   try {
     await connectDB()
     const auth = getAuthFromRequest(req)
-    // Public sees only published; admin sees all
+    // Public: only published posts. Admin: all posts.
     const query = auth ? {} : { published: true }
     const blogs = await Blog.find(query).sort({ createdAt: -1 }).select('-content')
-    return Response.json(blogs)
-  } catch {
-    return Response.json({ error: 'Failed to fetch blogs' }, { status: 500 })
+    // Guarantee array — prevents "data.slice is not a function" on client
+    return Response.json(Array.isArray(blogs) ? blogs : [])
+  } catch (err) {
+    console.error('[GET /api/blogs]', err.message)
+    // Return empty array so frontend .slice() never throws
+    return Response.json([])
   }
 }
 
 export async function POST(req) {
   const auth = getAuthFromRequest(req)
-  if (!auth) return unauthorizedResponse()
+  if (!auth) return Response.json({ error: 'Unauthorized' }, { status: 401 })
   try {
     await connectDB()
     const body = await req.json()

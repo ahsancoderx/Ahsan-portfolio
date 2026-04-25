@@ -1,7 +1,7 @@
-// app/api/blogs/[slug]/route.js
+// src/app/api/blogs/[slug]/route.js
 import connectDB from '@/lib/mongodb'
 import Blog from '@/models/Blog'
-import { getAuthFromRequest, unauthorizedResponse } from '@/lib/auth'
+import { getAuthFromRequest } from '@/lib/auth'
 import { deleteFromCloudinary } from '@/lib/cloudinary'
 
 export async function GET(req, { params }) {
@@ -9,19 +9,16 @@ export async function GET(req, { params }) {
     await connectDB()
     const blog = await Blog.findOne({ slug: params.slug })
     if (!blog) return Response.json({ error: 'Not found' }, { status: 404 })
-
-    // Increment views
     await Blog.findByIdAndUpdate(blog._id, { $inc: { views: 1 } })
-
     return Response.json(blog)
-  } catch {
+  } catch (err) {
     return Response.json({ error: 'Failed to fetch blog' }, { status: 500 })
   }
 }
 
 export async function PUT(req, { params }) {
   const auth = getAuthFromRequest(req)
-  if (!auth) return unauthorizedResponse()
+  if (!auth) return Response.json({ error: 'Unauthorized' }, { status: 401 })
   try {
     await connectDB()
     const body = await req.json()
@@ -35,7 +32,7 @@ export async function PUT(req, { params }) {
 
 export async function DELETE(req, { params }) {
   const auth = getAuthFromRequest(req)
-  if (!auth) return unauthorizedResponse()
+  if (!auth) return Response.json({ error: 'Unauthorized' }, { status: 401 })
   try {
     await connectDB()
     const blog = await Blog.findOne({ slug: params.slug })

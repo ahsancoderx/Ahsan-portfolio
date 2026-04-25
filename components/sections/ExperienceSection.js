@@ -3,7 +3,6 @@
 import { useEffect, useState, useRef } from 'react'
 import { Box, Container, Typography } from '@mui/material'
 
-// ─── CSS ─────────────────────────────────────────────────────────────────────
 const EXP_CSS = `
   @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap');
 
@@ -23,7 +22,6 @@ const EXP_CSS = `
   @keyframes glowPulse     { 0%,100%{ box-shadow:0 0 20px rgba(234,0,42,.3); }
                              50%{ box-shadow:0 0 40px rgba(234,0,42,.6); } }
 
-  /* scroll reveal */
   .ex-sr   { opacity:0; transform:translateY(40px); transition:opacity .8s ease, transform .8s ease; }
   .ex-sr-l { opacity:0; transform:translateX(-48px);transition:opacity .8s ease, transform .8s ease; }
   .ex-sr-r { opacity:0; transform:translateX(48px); transition:opacity .8s ease, transform .8s ease; }
@@ -31,7 +29,6 @@ const EXP_CSS = `
   .ex-d1{transition-delay:.06s}.ex-d2{transition-delay:.16s}.ex-d3{transition-delay:.26s}
   .ex-d4{transition-delay:.36s}.ex-d5{transition-delay:.46s}.ex-d6{transition-delay:.56s}
 
-  /* timeline line */
   .tl-line {
     position:absolute; left:50%; top:0;
     width:2px; height:0; opacity:0;
@@ -41,7 +38,6 @@ const EXP_CSS = `
   }
   .tl-line.run { height:100%; opacity:1; }
 
-  /* timeline dot */
   .tl-dot {
     position:absolute; left:50%; top:28px;
     width:18px; height:18px; border-radius:50%;
@@ -56,7 +52,6 @@ const EXP_CSS = `
   }
   .tl-dot.pop { transform:translate(-50%,-50%) scale(1); opacity:1; }
 
-  /* experience card */
   .exp-card {
     position:relative;
     border-radius:18px;
@@ -86,7 +81,6 @@ const EXP_CSS = `
     top:-5%; pointer-events:none; z-index:2;
   }
 
-  /* skill tag */
   .exp-tag {
     display:inline-block;
     font-family:'DM Sans',sans-serif; font-size:.7rem; font-weight:600;
@@ -100,7 +94,6 @@ const EXP_CSS = `
   }
   .exp-tag:hover { background:rgba(234,0,42,.2); box-shadow:0 0 10px rgba(234,0,42,.35); }
 
-  /* current badge */
   .current-badge {
     display:inline-flex; align-items:center; gap:6px;
     font-family:'DM Sans'; font-size:.7rem; font-weight:700;
@@ -114,59 +107,49 @@ const EXP_CSS = `
   }
 `
 
-// ─── Fallback data ────────────────────────────────────────────────────────────
 const FALLBACK = [
   {
-    _id:'1',
-    company:'TechCorp Solutions',
-    role:'Senior Frontend Developer',
-    type:'Full-time',
-    location:'Remote',
-    startDate:'2022-01',
-    endDate:null,
-    isCurrent:true,
-    logo:null,
+    _id:'1', company:'TechCorp Solutions', role:'Senior Frontend Developer',
+    type:'Full-time', location:'Remote', startDate:'2022-01', endDate:null, isCurrent:true, logo:null,
     description:'Led the development of a large-scale SaaS dashboard using Next.js and TypeScript. Improved Core Web Vitals scores by 40% and mentored a team of 3 junior developers.',
     achievements:['Improved page load speed by 40%','Built reusable component library used across 5 products','Led migration from CRA to Next.js 13'],
-    skills:['Next.js','TypeScript','React','Tailwind CSS','GraphQL'],
-    order:0,
+    skills:['Next.js','TypeScript','React','Tailwind CSS','GraphQL'], order:0,
   },
   {
-    _id:'2',
-    company:'Digital Agency X',
-    role:'Frontend Developer',
-    type:'Full-time',
-    location:'Lahore, Pakistan',
-    startDate:'2020-06',
-    endDate:'2021-12',
-    isCurrent:false,
-    logo:null,
+    _id:'2', company:'Digital Agency X', role:'Frontend Developer',
+    type:'Full-time', location:'Lahore, Pakistan', startDate:'2020-06', endDate:'2021-12', isCurrent:false, logo:null,
     description:'Built and maintained 15+ client websites with strong SEO focus. Collaborated closely with designers to bring Figma mockups to pixel-perfect reality.',
     achievements:['Delivered 15+ client projects on time','Ranked 3 websites #1 on Google','Reduced bounce rate by 28% through UX improvements'],
-    skills:['React','JavaScript','SEO','CSS','WordPress'],
-    order:1,
+    skills:['React','JavaScript','SEO','CSS','WordPress'], order:1,
   },
   {
-    _id:'3',
-    company:'Freelance',
-    role:'Full-Stack Developer & SEO Consultant',
-    type:'Freelance',
-    location:'Remote',
-    startDate:'2019-01',
-    endDate:'2020-05',
-    isCurrent:false,
-    logo:null,
+    _id:'3', company:'Freelance', role:'Full-Stack Developer & SEO Consultant',
+    type:'Freelance', location:'Remote', startDate:'2019-01', endDate:'2020-05', isCurrent:false, logo:null,
     description:'Worked with startups and small businesses to design, develop, and optimise their web presence. Managed end-to-end projects from requirement gathering to deployment.',
     achievements:['Helped 10+ businesses grow organic traffic','Built 3 e-commerce stores from scratch','Maintained 5-star rating on Upwork'],
-    skills:['Node.js','MongoDB','React','SEO','Figma'],
-    order:2,
+    skills:['Node.js','MongoDB','React','SEO','Figma'], order:2,
   },
 ]
 
-const PARTICLES = Array.from({ length: 14 }, (_, i) => ({
-  id:i, top:`${Math.random()*100}%`, left:`${Math.random()*100}%`,
-  size:`${2+Math.random()*3}px`, delay:`${Math.random()*7}s`, dur:`${5+Math.random()*9}s`,
-}))
+// ✅ Fixed — no Math.random()
+const PARTICLES = [
+  { id:0,  top:'5%',  left:'8%',  size:'3px', delay:'0s',   dur:'6s'  },
+  { id:1,  top:'12%', left:'72%', size:'2px', delay:'1.2s', dur:'8s'  },
+  { id:2,  top:'22%', left:'45%', size:'4px', delay:'0.5s', dur:'7s'  },
+  { id:3,  top:'38%', left:'88%', size:'2px', delay:'2.1s', dur:'9s'  },
+  { id:4,  top:'45%', left:'15%', size:'3px', delay:'0.8s', dur:'5s'  },
+  { id:5,  top:'55%', left:'60%', size:'5px', delay:'1.7s', dur:'11s' },
+  { id:6,  top:'62%', left:'32%', size:'2px', delay:'3.0s', dur:'8s'  },
+  { id:7,  top:'70%', left:'90%', size:'3px', delay:'0.3s', dur:'6s'  },
+  { id:8,  top:'78%', left:'20%', size:'4px', delay:'2.5s', dur:'10s' },
+  { id:9,  top:'85%', left:'55%', size:'2px', delay:'1.0s', dur:'7s'  },
+  { id:10, top:'90%', left:'40%', size:'3px', delay:'0.6s', dur:'9s'  },
+  { id:11, top:'18%', left:'28%', size:'2px', delay:'4.0s', dur:'13s' },
+  { id:12, top:'30%', left:'75%', size:'4px', delay:'1.5s', dur:'8s'  },
+  { id:13, top:'50%', left:'82%', size:'2px', delay:'1.9s', dur:'12s' },
+]
+
+const DELAY_CLASSES = ['ex-d1','ex-d2','ex-d3','ex-d4','ex-d5','ex-d6']
 
 function formatDate(str) {
   if (!str) return ''
@@ -182,11 +165,13 @@ function duration(start, end) {
   return [y && `${y}y`, m && `${m}m`].filter(Boolean).join(' ')
 }
 
-// ─── Single experience card ───────────────────────────────────────────────────
-function ExpCard({ exp, index, lineRef }) {
+function ExpCard({ exp, index }) {
   const dotRef  = useRef(null)
   const cardRef = useRef(null)
   const isLeft  = index % 2 === 0
+
+  // ✅ Fixed — static lookup, no Math.min at render time
+  const delayClass = DELAY_CLASSES[index < 6 ? index : 5]
 
   useEffect(() => {
     const io = new IntersectionObserver(entries => {
@@ -212,20 +197,15 @@ function ExpCard({ exp, index, lineRef }) {
       gap:{ xs:2, md:0 },
       mb:{ xs:6, md:8 },
     }}>
-
-      {/* ── card side ── */}
       <Box
         ref={cardRef}
-        className={`exp-card ${isLeft ? 'ex-sr-l' : 'ex-sr-r'} ex-d${Math.min(index+1,6)}`}
+        className={`exp-card ${isLeft ? 'ex-sr-l' : 'ex-sr-r'} ${delayClass}`}
         style={{ '--dir': isLeft ? '-48px' : '48px' }}
         sx={{ flex:1, mx:{ xs:0, md: isLeft ? '0 60px 0 0' : '0 0 0 60px' } }}
       >
         <Box className="exp-scan"/>
 
-        {/* header row */}
         <Box sx={{ display:'flex', alignItems:'flex-start', gap:2, mb:2 }}>
-
-          {/* logo / initials */}
           <Box sx={{
             width:52, height:52, borderRadius:'12px', flexShrink:0,
             background: exp.logo ? 'transparent' : 'linear-gradient(135deg,#EA002A,rgba(234,0,42,.5))',
@@ -251,24 +231,18 @@ function ExpCard({ exp, index, lineRef }) {
                 </span>
               )}
             </Box>
-
             <Box sx={{ display:'flex', flexWrap:'wrap', gap:1.5, alignItems:'center' }}>
               <Typography sx={{ fontFamily:"'DM Sans'", fontWeight:600, fontSize:'.85rem', color:'#EA002A' }}>
                 {exp.company}
               </Typography>
               <Box sx={{ width:'3px', height:'3px', borderRadius:'50%', bgcolor:'#444' }}/>
-              <Typography sx={{ fontFamily:"'DM Sans'", fontSize:'.78rem', color:'#666' }}>
-                {exp.type}
-              </Typography>
+              <Typography sx={{ fontFamily:"'DM Sans'", fontSize:'.78rem', color:'#666' }}>{exp.type}</Typography>
               <Box sx={{ width:'3px', height:'3px', borderRadius:'50%', bgcolor:'#444' }}/>
-              <Typography sx={{ fontFamily:"'DM Sans'", fontSize:'.78rem', color:'#666' }}>
-                📍 {exp.location}
-              </Typography>
+              <Typography sx={{ fontFamily:"'DM Sans'", fontSize:'.78rem', color:'#666' }}>📍 {exp.location}</Typography>
             </Box>
           </Box>
         </Box>
 
-        {/* date & duration */}
         <Box sx={{
           display:'inline-flex', alignItems:'center', gap:1.5, mb:2,
           px:2, py:.7, borderRadius:'8px',
@@ -283,12 +257,10 @@ function ExpCard({ exp, index, lineRef }) {
           </Typography>
         </Box>
 
-        {/* description */}
         <Typography sx={{ fontFamily:"'DM Sans'", color:'#888', fontSize:'.88rem', lineHeight:1.78, mb:2 }}>
           {exp.description}
         </Typography>
 
-        {/* achievements */}
         {exp.achievements?.length > 0 && (
           <Box sx={{ mb:2.5 }}>
             {exp.achievements.map((a, i) => (
@@ -305,14 +277,12 @@ function ExpCard({ exp, index, lineRef }) {
           </Box>
         )}
 
-        {/* skills */}
         <Box sx={{ display:'flex', flexWrap:'wrap' }}>
           {exp.skills?.map((s, i) => (
             <span key={s} className="exp-tag" style={{ animationDelay:`${i*.3}s` }}>{s}</span>
           ))}
         </Box>
 
-        {/* corner glow */}
         <Box sx={{
           position:'absolute', bottom:-20, right:-20,
           width:80, height:80, borderRadius:'50%',
@@ -320,22 +290,16 @@ function ExpCard({ exp, index, lineRef }) {
         }}/>
       </Box>
 
-      {/* ── center dot (desktop) ── */}
-      <Box
-        ref={dotRef}
-        className="tl-dot"
-        sx={{ display:{ xs:'none', md:'block' } }}
-      />
+      <Box ref={dotRef} className="tl-dot" sx={{ display:{ xs:'none', md:'block' } }}/>
     </Box>
   )
 }
 
-// ─── Main ─────────────────────────────────────────────────────────────────────
 export default function ExperienceSection() {
   const [experiences, setExperiences] = useState([])
   const [loading, setLoading]         = useState(true)
-  const lineRef   = useRef(null)
-  const wrapRef   = useRef(null)
+  const lineRef = useRef(null)
+  const wrapRef = useRef(null)
 
   useEffect(() => {
     fetch('/api/experience')
@@ -345,7 +309,6 @@ export default function ExperienceSection() {
       .finally(() => setLoading(false))
   }, [])
 
-  // scroll reveal headings
   useEffect(() => {
     const io = new IntersectionObserver(
       entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in') }),
@@ -355,7 +318,6 @@ export default function ExperienceSection() {
     return () => io.disconnect()
   }, [])
 
-  // draw timeline line on scroll
   useEffect(() => {
     const io = new IntersectionObserver(
       entries => entries.forEach(e => { if (e.isIntersecting) lineRef.current?.classList.add('run') }),
@@ -377,7 +339,6 @@ export default function ExperienceSection() {
         overflow:'hidden', fontFamily:"'DM Sans',sans-serif",
       }}>
 
-        {/* BG */}
         <Box sx={{
           position:'absolute', inset:0, zIndex:0,
           background:`
@@ -390,6 +351,7 @@ export default function ExperienceSection() {
           backgroundImage:`linear-gradient(rgba(234,0,42,1) 1px,transparent 1px),linear-gradient(90deg,rgba(234,0,42,1) 1px,transparent 1px)`,
           backgroundSize:'48px 48px',
         }}/>
+
         {PARTICLES.map(p => (
           <Box key={p.id} sx={{
             position:'absolute', borderRadius:'50%', zIndex:0,
@@ -398,6 +360,7 @@ export default function ExperienceSection() {
             animation:`particleDrift ${p.dur} ${p.delay} ease-in-out infinite`,
           }}/>
         ))}
+
         <Box sx={{
           position:'absolute', right:{ xs:16, md:40 }, top:'10%', bottom:'10%',
           width:'1px', zIndex:0,
@@ -405,8 +368,6 @@ export default function ExperienceSection() {
         }}/>
 
         <Container sx={{ position:'relative', zIndex:2, maxWidth:'1100px !important' }}>
-
-          {/* heading */}
           <Box className="ex-sr" sx={{ mb:{ xs:7, md:10 }, textAlign:'center' }}>
             <Typography sx={{
               fontFamily:"'DM Sans'", fontWeight:600, fontSize:'.8rem',
@@ -432,15 +393,8 @@ export default function ExperienceSection() {
             </Box>
           </Box>
 
-          {/* timeline */}
           <Box ref={wrapRef} sx={{ position:'relative', pb:4 }}>
-            {/* center line (desktop only) */}
-            <Box
-              ref={lineRef}
-              className="tl-line"
-              sx={{ display:{ xs:'none', md:'block' } }}
-            />
-
+            <Box ref={lineRef} className="tl-line" sx={{ display:{ xs:'none', md:'block' } }}/>
             {loading
               ? <Box sx={{ textAlign:'center', py:10 }}>
                   <Typography sx={{ color:'#EA002A', fontFamily:"'Syne'", fontWeight:700 }}>Loading...</Typography>
@@ -452,7 +406,6 @@ export default function ExperienceSection() {
           </Box>
         </Container>
 
-        {/* marquee */}
         <Box sx={{
           mt:{ xs:6, md:8 }, py:2.5,
           borderTop:'1px solid rgba(255,255,255,.06)',
@@ -474,7 +427,6 @@ export default function ExperienceSection() {
           </Box>
         </Box>
 
-        {/* bottom divider */}
         <Box sx={{ position:'absolute', bottom:-1, left:0, width:'100%', overflow:'hidden', lineHeight:0, zIndex:3 }}>
           <svg viewBox="0 0 1440 60" preserveAspectRatio="none" style={{ height:60, width:'100%' }}>
             <polygon points="0,60 1440,0 1440,60" fill="#0a0a0a"/>

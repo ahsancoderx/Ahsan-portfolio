@@ -1,22 +1,22 @@
-// app/api/skills/route.js
+// src/app/api/skills/route.js
 import connectDB from '@/lib/mongodb'
 import Skill from '@/models/Skill'
-import { getAuthFromRequest, unauthorizedResponse } from '@/lib/auth'
+import { getAuthFromRequest } from '@/lib/auth'
 
 export async function GET() {
   try {
     await connectDB()
     const skills = await Skill.find().sort({ order: 1, category: 1 })
-    return Response.json(skills)
-  } catch {
-    return Response.json({ error: 'Failed to fetch skills' }, { status: 500 })
+    return Response.json(Array.isArray(skills) ? skills : [])
+  } catch (err) {
+    console.error('[GET /api/skills]', err.message)
+    return Response.json([])
   }
 }
 
 export async function POST(req) {
   const auth = getAuthFromRequest(req)
-  if (!auth) return unauthorizedResponse()
-
+  if (!auth) return Response.json({ error: 'Unauthorized' }, { status: 401 })
   try {
     await connectDB()
     const body = await req.json()
