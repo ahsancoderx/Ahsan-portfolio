@@ -116,7 +116,10 @@ const RINGS_CONFIG = [
   },
 ];
 
-
+const HERO_SOCIAL = [
+  { Icon: GitHubIcon,   href: 'https://github.com/ahsancoderx' },
+  { Icon: LinkedInIcon, href: 'https://www.linkedin.com/in/ahsan-ali-mern-stack-developer/' },
+];
 const PARTICLES = [
   { id:0,  top:'8%',  left:'12%', size:'3px', delay:'0s',    dur:'6s'   },
   { id:1,  top:'15%', left:'78%', size:'2px', delay:'1.2s',  dur:'8s'   },
@@ -251,23 +254,37 @@ export default function HeroSection() {
             </Typography>
 
             <Box className="sr-left d4" sx={{ display:'flex', gap:2, flexWrap:'wrap' }}>
-              <Button variant="contained" startIcon={<DownloadIcon />} sx={{
-                bgcolor:'#EA002A', fontFamily:"'DM Sans'", fontWeight:600,
-                px:3, py:1.2, borderRadius:'10px', textTransform:'none', fontSize:'1rem',
-                boxShadow:'0 0 24px rgba(234,0,42,.4)', transition:'all .3s',
-                '&:hover':{ bgcolor:'#c0392b', boxShadow:'0 0 38px rgba(234,0,42,.7)', transform:'translateY(-3px)' },
-              }}>
-                Download CV
-              </Button>
-              {[GitHubIcon, LinkedInIcon].map((Icon, i) => (
-                <IconButton key={i} sx={{
-                  color:'#ccc', border:'1px solid rgba(255,255,255,.15)', borderRadius:'10px',
-                  transition:'all .3s',
-                  '&:hover':{ color:'#EA002A', borderColor:'#EA002A', boxShadow:'0 0 16px rgba(234,0,42,.4)', transform:'translateY(-3px)' },
-                }}>
-                  <Icon />
-                </IconButton>
-              ))}
+              <Button
+  variant="contained"
+  component="a"
+  href="/Ahsan-full-stack-AI.pdf"
+download="Ahsan-full-stack-AI.pdf"
+  startIcon={<DownloadIcon />}
+  sx={{
+    bgcolor:'#EA002A', fontFamily:"'DM Sans'", fontWeight:600,
+    px:3, py:1.2, borderRadius:'10px', textTransform:'none', fontSize:'1rem',
+    boxShadow:'0 0 24px rgba(234,0,42,.4)', transition:'all .3s',
+    '&:hover':{ bgcolor:'#c0392b', boxShadow:'0 0 38px rgba(234,0,42,.7)', transform:'translateY(-3px)' },
+  }}
+>
+  Download CV
+</Button>
+              {HERO_SOCIAL.map(({ Icon, href }, i) => (
+  <IconButton
+    key={i}
+    component="a"
+    href={href}
+    target="_blank"
+    rel="noopener noreferrer"
+    sx={{
+      color:'#ccc', border:'1px solid rgba(255,255,255,.15)', borderRadius:'10px',
+      transition:'all .3s',
+      '&:hover':{ color:'#EA002A', borderColor:'#EA002A', boxShadow:'0 0 16px rgba(234,0,42,.4)', transform:'translateY(-3px)' },
+    }}
+  >
+    <Icon />
+  </IconButton>
+))}
             </Box>
           </Box>
 

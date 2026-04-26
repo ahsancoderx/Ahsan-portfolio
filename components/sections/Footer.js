@@ -1,7 +1,15 @@
 'use client'
 
 import { Box, Container, Typography } from '@mui/material'
+import GitHubIcon from '@mui/icons-material/GitHub'
+import LinkedInIcon from '@mui/icons-material/LinkedIn'
+import MusicVideoIcon from '@mui/icons-material/MusicVideo'
+import InstagramIcon from '@mui/icons-material/Instagram'
+import EmailIcon from '@mui/icons-material/Email'
+import PhoneIphoneIcon from '@mui/icons-material/PhoneIphone'
+import LocationOnIcon from '@mui/icons-material/LocationOn'
 import Link from 'next/link'
+
 
 const FOOTER_CSS = `
   @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap');
@@ -52,10 +60,16 @@ const NAV_LINKS = [
 ]
 
 const SOCIAL_LINKS = [
-  { icon:'🐙', label:'GitHub',   href:'https://github.com/ahsancoderx'   },
-  { icon:'💼', label:'LinkedIn', href:'https://www.linkedin.com/in/ahsan-ali-mern-stack-developer/' },
-  { icon:'🐦', label:'Tiktok',  href:'https://www.tiktok.com/@ahsantech74'  },
-  { icon:'📸', label:'Instagram',href:'https://instagram.com'},
+  { icon:<GitHubIcon sx={{ fontSize:'1.1rem', color:'rgba(255,255,255,.6)' }}/>, label:'GitHub',    href:'https://github.com/ahsancoderx'   },
+  { icon:<LinkedInIcon sx={{ fontSize:'1.1rem', color:'rgba(255,255,255,.6)' }}/>, label:'LinkedIn',  href:'https://www.linkedin.com/in/ahsan-ali-mern-stack-developer/' },
+  { icon:<MusicVideoIcon sx={{ fontSize:'1.1rem', color:'rgba(255,255,255,.6)' }}/>, label:'Tiktok',    href:'https://www.tiktok.com/@ahsantech74'  },
+  { icon:<InstagramIcon sx={{ fontSize:'1.1rem', color:'rgba(255,255,255,.6)' }}/>, label:'Instagram', href:'https://instagram.com'},
+]
+
+const CONTACT_ITEMS = [
+  { icon:<EmailIcon sx={{ fontSize:'.95rem', color:'#EA002A' }}/>, label:'Email',    value:'ahsanalitech7@gmail.com', href:'mailto:ahsanalitech7@gmail.com' },
+  { icon:<PhoneIphoneIcon sx={{ fontSize:'.95rem', color:'#EA002A' }}/>, label:'Phone',    value:'+92 327 1348097',               href:'tel:+923271348097' },
+  { icon:<LocationOnIcon sx={{ fontSize:'.95rem', color:'#EA002A' }}/>, label:'Location', value:'Lahore, Pakistan',               href:null },
 ]
 
 export default function Footer() {
@@ -158,7 +172,7 @@ export default function Footer() {
                 Services
               </Typography>
               <Box sx={{ display:'flex', flexDirection:'column', gap:1.8 }}>
-                {['Web Development','Frontend Dev','SEO Expert','UI/UX Design','Backend Dev','Local SEO'].map(s => (
+                {['Full stack development','Mobile App development','AI/ML development','UI/UX Design','Backend Dev','Chatbot'].map(s => (
                   <Box key={s} className="ft-link">
                     <Box component="span" sx={{ color:'rgba(234,0,42,.5)', fontSize:'.7rem' }}>▸</Box>
                     {s}
@@ -173,15 +187,14 @@ export default function Footer() {
                 Get In Touch
               </Typography>
 
-              {[
-                { icon:'📧', label:'Email', value:'ahsanaliwebdeveloper@gmail.com', href:'mailto:ahsanaliwebdeveloper@gmail.com' },
-                { icon:'📱', label:'Phone', value:'+92 327 1348097', href:'tel:+923271348097' },
-                { icon:'📍', label:'Location', value:'Lahore, Pakistan', href:null },
-              ].map(item => (
+              {CONTACT_ITEMS.map(item => (
                 <Box key={item.label} sx={{ mb:2.5 }}>
-                  <Typography sx={{ fontFamily:"'DM Sans'", fontSize:'.7rem', fontWeight:600, color:'#EA002A', letterSpacing:'1px', textTransform:'uppercase', mb:.5 }}>
-                    {item.icon} {item.label}
-                  </Typography>
+                  <Box sx={{ display:'flex', alignItems:'center', gap:.6, mb:.5 }}>
+                    {item.icon}
+                    <Typography sx={{ fontFamily:"'DM Sans'", fontSize:'.7rem', fontWeight:600, color:'#EA002A', letterSpacing:'1px', textTransform:'uppercase' }}>
+                      {item.label}
+                    </Typography>
+                  </Box>
                   {item.href
                     ? <Box component="a" href={item.href} sx={{ fontFamily:"'DM Sans'", fontSize:'.83rem', color:'#555', textDecoration:'none', transition:'color .2s', '&:hover':{ color:'#fff' } }}>{item.value}</Box>
                     : <Typography sx={{ fontFamily:"'DM Sans'", fontSize:'.83rem', color:'#555' }}>{item.value}</Typography>
