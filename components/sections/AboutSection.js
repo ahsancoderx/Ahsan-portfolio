@@ -3,13 +3,11 @@
 import { useEffect, useState, useRef } from 'react'
 import { Box, Container, Typography, Chip } from '@mui/material'
 import Image from 'next/image'
-import SectionTitle from '@/components/ui/SectionTitle'
 
 // ─── CSS injected once ───────────────────────────────────────────────────────
 const ABOUT_CSS = `
   @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap');
 
-  /* Re-use hero keyframes (safe to redefine) */
   @keyframes shimmerText  { 0%{ background-position:0% 50%; } 100%{ background-position:200% 50%; } }
   @keyframes particleDrift{ 0%,100%{ transform:translate(0,0); opacity:.5; } 50%{ transform:translate(10px,-14px); opacity:1; } }
   @keyframes floatImg     { 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(-10px); } }
@@ -23,7 +21,6 @@ const ABOUT_CSS = `
   @keyframes revealUp     { from{ opacity:0; transform:translateY(40px); }  to{ opacity:1; transform:none; } }
   @keyframes tagFloat     { 0%,100%{ transform:translateY(0) rotate(var(--r,0deg)); } 50%{ transform:translateY(-6px) rotate(var(--r,0deg)); } }
 
-  /* Scroll-reveal helpers */
   .ab-sr-left  { opacity:0; transform:translateX(-52px); transition:opacity .8s ease, transform .8s ease; }
   .ab-sr-right { opacity:0; transform:translateX(52px);  transition:opacity .8s ease, transform .8s ease; }
   .ab-sr-up    { opacity:0; transform:translateY(42px);  transition:opacity .75s ease, transform .75s ease; }
@@ -36,11 +33,9 @@ const ABOUT_CSS = `
   .ab-d5{ transition-delay:.62s; }
   .ab-d6{ transition-delay:.76s; }
 
-  /* Skill bar fill — triggered when .run added */
   .skill-fill { width:0%; transition:width 1.2s cubic-bezier(.4,0,.2,1); }
   .skill-fill.run { width:var(--w); }
 
-  /* Glowing tag chips */
   .about-tag {
     font-family:'DM Sans',sans-serif; font-weight:600; font-size:.78rem;
     padding:5px 14px; border-radius:20px; cursor:default;
@@ -57,7 +52,6 @@ const ABOUT_CSS = `
     transform:translateY(-3px) scale(1.04);
   }
 
-  /* Image corner ornaments */
   .img-corner {
     position:absolute; width:22px; height:22px;
     border-color:#EA002A; border-style:solid;
@@ -68,14 +62,20 @@ const ABOUT_CSS = `
   .img-corner.bl { bottom:-4px; left:-4px; border-bottom-width:3px; border-left-width:3px; border-radius:0 0 0 4px; }
   .img-corner.br { bottom:-4px; right:-4px; border-bottom-width:3px; border-right-width:3px; border-radius:0 0 4px 0; }
 
-  /* Diagonal divider */
   .about-divider {
     position:absolute; bottom:-1px; left:0; width:100%; overflow:hidden; line-height:0; z-index:3;
   }
   .about-divider svg { display:block; }
 `
 
-// ─── particles (reuse hero style) ────────────────────────────────────────────
+// ─── Static data ──────────────────────────────────────────────────────────────
+const PROFILE = {
+  name:      'Ahsan Ali',
+  email:     'ahsanalitech7@gmail.com',
+  avatarUrl: '/ahsan3-removebg-preview.png',
+  about:     "Full-stack engineer crafting scalable, AI-powered web products with Next.js & TypeScript.",
+}
+
 const PARTICLES = Array.from({ length: 18 }, (_, i) => ({
   id: i,
   top:  `${Math.random() * 100}%`,
@@ -85,27 +85,25 @@ const PARTICLES = Array.from({ length: 18 }, (_, i) => ({
   dur:  `${5 + Math.random() * 9}s`,
 }))
 
-// ─── skills ──────────────────────────────────────────────────────────────────
 const SKILLS = [
-  { label:'React / Next.js', pct:92 },
-  { label:'JavaScript / TypeScript', pct:88 },
-  { label:'UI/UX & Tailwind CSS', pct:85 },
-  { label:'SEO & Performance', pct:90 },
-  { label:'Node.js / MongoDB', pct:75 },
+  
+  { label:'React / Next.js',           pct:92 },
+  { label:'JavaScript / TypeScript',   pct:88 },
+  { label:'UI/UX & Tailwind CSS',      pct:85 },
+  { label:'SEO & Performance',         pct:90 },
+  { label:'Node.js / MongoDB',         pct:75 },
 ]
 
-// ─── stats ────────────────────────────────────────────────────────────────────
 const STATS = [
-  { value:50,  suffix:'+', label:'Projects Done'   },
-  { value:3,   suffix:'+', label:'Years Experience'},
-  { value:30,  suffix:'+', label:'Happy Clients'   },
-  { value:100, suffix:'%', label:'Dedication'      },
+  { value:20,  suffix:'+', label:'Projects Done'    },
+  { value:2,   suffix:'+', label:'Years Experience' },
+  { value:15,  suffix:'+', label:'Happy Clients'    },
+  { value:50, suffix:'%', label:'Dedication'       },
 ]
 
-// ─── tags ─────────────────────────────────────────────────────────────────────
 const TAGS = ['React','Next.js','TypeScript','Node.js','MongoDB','SEO','Tailwind','Figma','Python','REST APIs']
 
-// ─── animated counter hook ───────────────────────────────────────────────────
+// ─── animated counter hook ────────────────────────────────────────────────────
 function useCounter(target, started) {
   const [val, setVal] = useState(0)
   useEffect(() => {
@@ -122,7 +120,7 @@ function useCounter(target, started) {
   return val
 }
 
-// ─── single stat card ────────────────────────────────────────────────────────
+// ─── single stat card ─────────────────────────────────────────────────────────
 function StatCard({ stat, started, delay }) {
   const val = useCounter(stat.value, started)
   return (
@@ -136,7 +134,6 @@ function StatCard({ stat, started, delay }) {
       transition:'transform .3s, box-shadow .3s',
       '&:hover':{ transform:'translateY(-5px)', boxShadow:'0 0 28px rgba(234,0,42,.35)' },
     }}>
-      {/* red glow blob */}
       <Box sx={{
         position:'absolute', bottom:-20, right:-20,
         width:70, height:70, borderRadius:'50%',
@@ -173,7 +170,6 @@ function SkillBar({ skill, started, delay }) {
         </Typography>
       </Box>
       <Box sx={{ height:'7px', borderRadius:'8px', background:'rgba(255,255,255,.08)', overflow:'hidden', position:'relative' }}>
-        {/* background shimmer track */}
         <Box sx={{
           position:'absolute', inset:0,
           background:'repeating-linear-gradient(90deg,transparent 0px,transparent 10px,rgba(255,255,255,.03) 10px,rgba(255,255,255,.03) 11px)',
@@ -198,15 +194,10 @@ function SkillBar({ skill, started, delay }) {
 
 // ─── main component ───────────────────────────────────────────────────────────
 export default function AboutSection() {
-  const [profile, setProfile]       = useState(null)
-  const [statsStarted, setStats]    = useState(false)
-  const [skillsStarted, setSkills]  = useState(false)
+  const [statsStarted, setStats]   = useState(false)
+  const [skillsStarted, setSkills] = useState(false)
   const statsRef  = useRef(null)
   const skillsRef = useRef(null)
-
-  useEffect(() => {
-    fetch('/api/profile').then(r => r.json()).then(setProfile).catch(() => {})
-  }, [])
 
   // scroll reveal
   useEffect(() => {
@@ -305,7 +296,6 @@ export default function AboutSection() {
             }}>
               About Me
             </Typography>
-            {/* decorative line */}
             <Box sx={{ display:'flex', justifyContent:'center', alignItems:'center', gap:1.5, mt:2 }}>
               <Box sx={{ width:40, height:'2px', background:'linear-gradient(90deg,transparent,#EA002A)' }}/>
               <Box sx={{ width:8, height:8, borderRadius:'50%', bgcolor:'#EA002A', boxShadow:'0 0 10px #EA002A' }}/>
@@ -323,8 +313,6 @@ export default function AboutSection() {
 
             {/* ─── LEFT: image ─────────────────────────────────── */}
             <Box className="ab-sr-left ab-d1" sx={{ flex:'0 0 auto', width:{ xs:'100%', md:380 } }}>
-
-              {/* outer glow frame */}
               <Box sx={{
                 position:'relative',
                 '&::before':{
@@ -334,7 +322,6 @@ export default function AboutSection() {
                   zIndex:0, filter:'blur(6px)',
                 }
               }}>
-                {/* image box */}
                 <Box sx={{
                   position:'relative', borderRadius:'16px', overflow:'hidden',
                   height:{ xs:320, md:440 },
@@ -343,27 +330,21 @@ export default function AboutSection() {
                   zIndex:1,
                 }}>
                   <Image
-                    src={profile?.avatarUrl || '/ahsan3-removebg-preview.png'}
-                    alt="Ahsan Ali"
+                    src={PROFILE.avatarUrl}
+                    alt={PROFILE.name}
                     fill
                     style={{ objectFit:'cover', animation:'floatImg 6s ease-in-out infinite' }}
                   />
-
-                  {/* scan line effect */}
                   <Box sx={{
                     position:'absolute', left:0, right:0, height:'3px',
                     background:'linear-gradient(90deg,transparent,rgba(234,0,42,.6),transparent)',
                     animation:'scanLine 4s linear infinite', zIndex:2,
                   }}/>
-
-                  {/* bottom fade */}
                   <Box sx={{
                     position:'absolute', bottom:0, left:0, right:0, height:'35%',
                     background:'linear-gradient(to top,rgba(10,10,10,.75),transparent)',
                     zIndex:2,
                   }}/>
-
-                  {/* name badge */}
                   <Box sx={{
                     position:'absolute', bottom:16, left:'50%',
                     transform:'translateX(-50%)', zIndex:3,
@@ -377,7 +358,7 @@ export default function AboutSection() {
                   }}>
                     <Box sx={{ width:8, height:8, borderRadius:'50%', bgcolor:'#EA002A', boxShadow:'0 0 8px #EA002A', flexShrink:0, animation:'glowPulse 1.5s infinite' }}/>
                     <Typography sx={{ fontFamily:"'Syne'", fontWeight:700, color:'#fff', fontSize:'.85rem' }}>
-                      {profile?.name || 'Ahsan Ali'}
+                      {PROFILE.name}
                     </Typography>
                     <Typography sx={{ color:'#EA002A', fontSize:'.72rem', fontFamily:"'DM Sans'", fontWeight:600 }}>
                       Available
@@ -385,13 +366,11 @@ export default function AboutSection() {
                   </Box>
                 </Box>
 
-                {/* corner ornaments */}
                 {['tl','tr','bl','br'].map(c => (
                   <Box key={c} className={`img-corner ${c}`} sx={{ position:'absolute', zIndex:2 }}/>
                 ))}
               </Box>
 
-              {/* floating tag below image */}
               <Box className="ab-sr-up ab-d3" sx={{ mt:3, display:'flex', gap:1, flexWrap:'wrap', justifyContent:'center' }}>
                 {TAGS.slice(0,5).map((t,i) => (
                   <span key={t} className="about-tag" style={{ animationDelay:`${i*0.35}s`, '--r':'0deg' }}>{t}</span>
@@ -402,7 +381,6 @@ export default function AboutSection() {
             {/* ─── RIGHT: content ──────────────────────────────── */}
             <Box sx={{ flex:1, minWidth:0 }}>
 
-              {/* Who Am I */}
               <Typography className="ab-sr-right ab-d1" sx={{
                 fontFamily:"'Syne',sans-serif", fontWeight:800,
                 fontSize:{ xs:'2rem', md:'2.5rem' },
@@ -422,16 +400,14 @@ export default function AboutSection() {
                 fontFamily:"'DM Sans'",
                 mb:2.5, maxWidth:500,
               }}>
-                {profile?.about ||
-                  'I\'m a passionate Frontend Developer & SEO Expert based in Pakistan. I specialize in crafting blazing-fast, pixel-perfect web experiences that don\'t just look great — they rank, convert, and perform.'}
+                {PROFILE.about}
               </Typography>
 
-              {/* Info rows */}
               {[
-                { label:'Name',     value: profile?.name  || 'Ahsan Ali'          },
-                { label:'Email',    value: profile?.email || 'ahsan@example.com'  },
-                { label:'Location', value: 'Pakistan'                             },
-                { label:'Role',     value: 'Frontend Developer & SEO Expert'      },
+                { label:'Name',     value: PROFILE.name                         },
+                { label:'Email',    value: PROFILE.email                        },
+                { label:'Location', value: 'Pakistan'                           },
+                { label:'Role',     value: 'Full Stack Developer (Mern) AI Enthusiast'    },
               ].map((item, i) => (
                 <Box key={item.label} className={`ab-sr-right ab-d${i+2}`} sx={{
                   display:'flex', gap:2, alignItems:'flex-start',
@@ -451,7 +427,6 @@ export default function AboutSection() {
                 </Box>
               ))}
 
-              {/* More tags */}
               <Box className="ab-sr-right ab-d4" sx={{ display:'flex', gap:1, flexWrap:'wrap', mt:1.5, mb:4 }}>
                 {TAGS.slice(5).map((t, i) => (
                   <span key={t} className="about-tag" style={{ animationDelay:`${i*0.3}s` }}>{t}</span>

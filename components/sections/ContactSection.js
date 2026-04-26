@@ -1,302 +1,446 @@
 'use client'
 
-import { useState } from 'react'
-import {
-  Box,
-  Container,
-  Typography,
-  TextField,
-  Button,
-  CircularProgress,
-  Paper,
-} from '@mui/material'
+import { useState, useEffect, useRef } from 'react'
+import { Box, Container, Typography, CircularProgress } from '@mui/material'
 
-import EmailIcon from '@mui/icons-material/Email'
-import PhoneIcon from '@mui/icons-material/Phone'
-import LocationOnIcon from '@mui/icons-material/LocationOn'
-import SendIcon from '@mui/icons-material/Send'
+const CONTACT_CSS = `
+  @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap');
 
-import { motion } from 'framer-motion'
-import toast from 'react-hot-toast'
-import SectionTitle from '@/components/ui/SectionTitle'
+  @keyframes shimmerText   { 0%{ background-position:0% 50%; } 100%{ background-position:200% 50%; } }
+  @keyframes particleDrift { 0%,100%{ transform:translate(0,0);opacity:.5; } 50%{ transform:translate(10px,-14px);opacity:1; } }
+  @keyframes glowPulse     { 0%,100%{ box-shadow:0 0 20px rgba(234,0,42,.3); } 50%{ box-shadow:0 0 45px rgba(234,0,42,.7); } }
+  @keyframes scanLine      { 0%{top:-5%;opacity:0;} 10%{opacity:1;} 90%{opacity:1;} 100%{top:110%;opacity:0;} }
+  @keyframes fadeUp        { from{opacity:0;transform:translateY(36px);} to{opacity:1;transform:none;} }
+  @keyframes fadeLeft      { from{opacity:0;transform:translateX(-44px);} to{opacity:1;transform:none;} }
+  @keyframes fadeRight     { from{opacity:0;transform:translateX(44px);} to{opacity:1;transform:none;} }
+  @keyframes successPop    { 0%{transform:scale(0) rotate(-15deg);opacity:0;} 70%{transform:scale(1.15) rotate(3deg);} 100%{transform:scale(1) rotate(0deg);opacity:1;} }
+  @keyframes ripple        { 0%{transform:scale(0);opacity:.6;} 100%{transform:scale(3);opacity:0;} }
+  @keyframes borderGlow    { 0%,100%{border-color:rgba(234,0,42,.2);} 50%{border-color:rgba(234,0,42,.6);} }
+  @keyframes tagFloat      { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-4px);} }
+
+  /* scroll reveal */
+  .ct-sr   { opacity:0; transform:translateY(36px); transition:opacity .8s ease,transform .8s ease; }
+  .ct-sr-l { opacity:0; transform:translateX(-44px);transition:opacity .8s ease,transform .8s ease; }
+  .ct-sr-r { opacity:0; transform:translateX(44px); transition:opacity .8s ease,transform .8s ease; }
+  .ct-sr.in,.ct-sr-l.in,.ct-sr-r.in { opacity:1; transform:none; }
+  .ct-d1{transition-delay:.06s} .ct-d2{transition-delay:.14s}
+  .ct-d3{transition-delay:.22s} .ct-d4{transition-delay:.30s}
+
+  /* info card */
+  .info-card {
+    display:flex; align-items:center; gap:16px;
+    padding:16px 20px; border-radius:14px;
+    background:linear-gradient(135deg,rgba(234,0,42,.07) 0%,rgba(255,255,255,.02) 100%);
+    border:1px solid rgba(234,0,42,.18);
+    text-decoration:none;
+    transition:transform .3s cubic-bezier(.34,1.4,.64,1), box-shadow .3s, border-color .3s;
+    position:relative; overflow:hidden;
+  }
+  .info-card:hover {
+    transform:translateY(-4px) scale(1.02);
+    box-shadow:0 12px 36px rgba(0,0,0,.5),0 0 24px rgba(234,0,42,.25);
+    border-color:rgba(234,0,42,.5);
+  }
+  .info-card::before {
+    content:''; position:absolute; inset:0; border-radius:14px;
+    background:linear-gradient(135deg,rgba(234,0,42,.1),transparent);
+    opacity:0; transition:opacity .3s;
+  }
+  .info-card:hover::before { opacity:1; }
+
+  /* icon box */
+  .info-icon {
+    width:46px; height:46px; border-radius:12px; flex-shrink:0;
+    background:rgba(234,0,42,.12); border:1px solid rgba(234,0,42,.3);
+    display:flex; align-items:center; justify-content:center;
+    font-size:1.2rem;
+    transition:background .3s, box-shadow .3s, transform .3s;
+  }
+  .info-card:hover .info-icon {
+    background:rgba(234,0,42,.22);
+    box-shadow:0 0 16px rgba(234,0,42,.4);
+    transform:rotate(-5deg) scale(1.1);
+  }
+
+  /* form field */
+  .ct-field {
+    width:100%; background:rgba(255,255,255,.04);
+    border:1px solid rgba(255,255,255,.09);
+    border-radius:12px; padding:13px 16px;
+    font-family:'DM Sans',sans-serif; font-size:.92rem; color:#fff;
+    outline:none; transition:border .28s, box-shadow .28s, background .28s;
+    resize:none;
+  }
+  .ct-field::placeholder { color:#444; }
+  .ct-field:focus {
+    border-color:rgba(234,0,42,.55);
+    box-shadow:0 0 0 3px rgba(234,0,42,.12), 0 0 20px rgba(234,0,42,.1);
+    background:rgba(234,0,42,.04);
+  }
+  .ct-field:hover:not(:focus) { border-color:rgba(255,255,255,.18); }
+
+  /* submit button */
+  .ct-submit {
+    width:100%; padding:14px 24px; border-radius:12px;
+    border:none; cursor:pointer; position:relative; overflow:hidden;
+    background:#EA002A; color:#fff;
+    font-family:'Syne',sans-serif; font-weight:800; font-size:1rem;
+    letter-spacing:.5px; text-transform:uppercase;
+    box-shadow:0 0 24px rgba(234,0,42,.45);
+    transition:all .3s; animation:glowPulse 3s ease-in-out infinite;
+  }
+  .ct-submit:hover:not(:disabled) {
+    background:#c0392b;
+    box-shadow:0 0 40px rgba(234,0,42,.7);
+    transform:translateY(-2px);
+    animation:none;
+  }
+  .ct-submit:disabled { opacity:.7; cursor:not-allowed; animation:none; }
+  .ct-submit .ripple-el {
+    position:absolute; border-radius:50%;
+    width:10px; height:10px; background:rgba(255,255,255,.3);
+    transform:scale(0); animation:ripple .6s linear;
+    pointer-events:none;
+  }
+
+  /* label */
+  .ct-label {
+    font-family:'DM Sans'; font-size:.72rem; font-weight:700;
+    color:#EA002A; letter-spacing:1.5px; text-transform:uppercase;
+    margin-bottom:6px; display:block;
+  }
+
+  /* success state */
+  .success-wrap {
+    text-align:center; padding:40px 20px;
+    animation:successPop .6s cubic-bezier(.34,1.56,.64,1) forwards;
+  }
+
+  /* social pill */
+  .social-pill {
+    display:inline-flex; align-items:center; gap:8px;
+    padding:8px 16px; border-radius:30px;
+    border:1px solid rgba(255,255,255,.1); background:rgba(255,255,255,.04);
+    color:#888; font-family:'DM Sans'; font-size:.78rem; font-weight:600;
+    text-decoration:none; transition:all .25s;
+  }
+  .social-pill:hover {
+    color:#fff; border-color:rgba(234,0,42,.45);
+    background:rgba(234,0,42,.1);
+    box-shadow:0 0 14px rgba(234,0,42,.3);
+    transform:translateY(-2px);
+  }
+`
+
+const PARTICLES = Array.from({ length: 14 }, (_, i) => ({
+  id:i, top:`${Math.random()*100}%`, left:`${Math.random()*100}%`,
+  size:`${2+Math.random()*3}px`, delay:`${Math.random()*7}s`, dur:`${5+Math.random()*9}s`,
+}))
 
 const CONTACT_INFO = [
   {
-    icon: <PhoneIcon />,
+    icon: '📞',
     label: 'Phone',
-    value: '+923271348097',
+    value: '+92 327 1348097',
     href: 'tel:+923271348097',
+    sub: 'Tap to call directly',
   },
   {
-    icon: <EmailIcon />,
+    icon: '✉️',
     label: 'Email',
-    value: 'ahsanaliwebdeveloper@gmail.com',
-    href: 'mailto:ahsanaliwebdeveloper@gmail.com',
+    value: 'ahsanalitech7@gmail.com',
+    href: 'mailto:ahsanalitech7@gmail.com',
+    sub: 'Tap to open Gmail',
   },
   {
-    icon: <LocationOnIcon />,
+    icon: '📍',
     label: 'Location',
     value: 'Lahore, Pakistan',
-    href: null,
+    href: 'https://maps.google.com/?q=Lahore,Pakistan',
+    sub: 'Open in Google Maps',
+  },
+  {
+    icon: '💬',
+    label: 'WhatsApp',
+    value: '+92 327 1348097',
+    href: 'https://wa.me/923271348097?text=Hi%20Ahsan!%20I%20visited%20your%20portfolio.',
+    sub: 'Chat on WhatsApp',
   },
 ]
 
-const EMPTY = {
-  name: '',
-  email: '',
-  phone: '',
-  subject: '',
-  message: '',
-}
+const EMPTY = { name:'', email:'', phone:'', subject:'', message:'' }
 
 export default function ContactSection() {
-  const [form, setForm] = useState(EMPTY)
+  const [form, setForm]       = useState(EMPTY)
   const [loading, setLoading] = useState(false)
+  const [success, setSuccess] = useState(false)
+  const [error, setError]     = useState('')
+  const btnRef = useRef(null)
 
-  const handleChange = (field) => (e) => {
-    setForm({ ...form, [field]: e.target.value })
+  // scroll reveal
+  useEffect(() => {
+    const io = new IntersectionObserver(
+      entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in') }),
+      { threshold: 0.08 }
+    )
+    document.querySelectorAll('.ct-sr,.ct-sr-l,.ct-sr-r').forEach(el => io.observe(el))
+    return () => io.disconnect()
+  }, [])
+
+  const set = (k) => (e) => setForm(f => ({ ...f, [k]: e.target.value }))
+
+  // ripple effect on button click
+  const addRipple = (e) => {
+    const btn = btnRef.current
+    if (!btn) return
+    const rect = btn.getBoundingClientRect()
+    const el = document.createElement('span')
+    el.className = 'ripple-el'
+    el.style.left = `${e.clientX - rect.left - 5}px`
+    el.style.top  = `${e.clientY - rect.top  - 5}px`
+    btn.appendChild(el)
+    setTimeout(() => el.remove(), 700)
   }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     setLoading(true)
+    setError('')
 
     try {
-      const res = await fetch('/api/contact', {
+      const res  = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form),
       })
-
       const data = await res.json()
-
       if (!res.ok) throw new Error(data.error || 'Something went wrong')
-
-      toast.success('Message sent successfully!')
+      setSuccess(true)
       setForm(EMPTY)
     } catch (err) {
-      toast.error(err.message)
+      setError(err.message)
     } finally {
       setLoading(false)
     }
   }
 
-  /* 🔥 NEON INPUT STYLE */
-  const neonInput = {
-    mb: 2,
-    flex: 1,
-
-    '& .MuiOutlinedInput-root': {
-      borderRadius: '10px',
-      background: '#111',
-      boxShadow: '0 0 15px rgba(234,0,42,0.6)',
-
-      '& fieldset': {
-        borderColor: 'transparent',
-      },
-
-      '&:hover': {
-        boxShadow: '0 0 25px rgba(234,0,42,0.9)',
-      },
-
-      '&.Mui-focused': {
-        boxShadow: '0 0 30px rgba(234,0,42,1)',
-      },
-    },
-
-    '& input, & textarea': {
-      color: '#fff',
-    },
-
-    '& input::placeholder, & textarea::placeholder': {
-      color: '#888',
-      opacity: 1,
-    },
-  }
-
   return (
-    <Box id="contact" sx={{ bgcolor: '#000', py: 10 }}>
-      <Container maxWidth="lg">
+    <>
+      <style>{CONTACT_CSS}</style>
 
-        <SectionTitle title="Contact Me" subtitle="Let's work together" />
+      <Box id="contact" sx={{
+        position:'relative', bgcolor:'#0a0a0a',
+        pt:{ xs:12, md:14 }, pb:{ xs:10, md:12 },
+        overflow:'hidden', fontFamily:"'DM Sans',sans-serif",
+      }}>
 
-        <Box
-          sx={{
-            display: 'flex',
-            flexWrap: 'wrap',
-            gap: 4,
-            mt: 5,
-          }}
-        >
+        {/* BG */}
+        <Box sx={{ position:'absolute', inset:0, zIndex:0, background:`radial-gradient(ellipse 60% 55% at 50% 100%,rgba(234,0,42,.12) 0%,transparent 60%)` }}/>
+        <Box sx={{ position:'absolute', inset:0, zIndex:0, opacity:.022, backgroundImage:`linear-gradient(rgba(234,0,42,1) 1px,transparent 1px),linear-gradient(90deg,rgba(234,0,42,1) 1px,transparent 1px)`, backgroundSize:'48px 48px' }}/>
+        {PARTICLES.map(p => (
+          <Box key={p.id} sx={{ position:'absolute', borderRadius:'50%', zIndex:0, top:p.top, left:p.left, width:p.size, height:p.size, bgcolor:'rgba(234,0,42,.4)', animation:`particleDrift ${p.dur} ${p.delay} ease-in-out infinite` }}/>
+        ))}
 
-          {/* LEFT SIDE (UNCHANGED) */}
-          <Box sx={{ flex: 1, minWidth: 300 }}>
-            <motion.div
-              initial={{ opacity: 0, x: -40 }}
-              whileInView={{ opacity: 1, x: 0 }}
-            >
-              <Typography variant="h4" sx={{ color: '#fff', fontWeight: 700, mb: 2 }}>
-                Let’s Work Together
+        <Container sx={{ position:'relative', zIndex:2, maxWidth:'1100px !important' }}>
+
+          {/* heading */}
+          <Box className="ct-sr" sx={{ mb:{ xs:7, md:9 }, textAlign:'center' }}>
+            <Typography sx={{ fontFamily:"'DM Sans'", fontWeight:600, fontSize:'.8rem', letterSpacing:'4px', textTransform:'uppercase', color:'#EA002A', mb:1.5 }}>
+              — Let's Connect —
+            </Typography>
+            <Typography sx={{
+              fontFamily:"'Syne',sans-serif", fontWeight:800,
+              fontSize:{ xs:'2.4rem', md:'3.2rem' },
+              letterSpacing:'-1px', lineHeight:1.05,
+              background:'linear-gradient(90deg,#fff 40%,#EA002A 90%)',
+              backgroundSize:'200% auto',
+              WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent',
+              animation:'shimmerText 5s linear infinite',
+            }}>
+              Get In Touch
+            </Typography>
+            <Box sx={{ display:'flex', justifyContent:'center', alignItems:'center', gap:1.5, mt:2 }}>
+              <Box sx={{ width:40, height:'2px', background:'linear-gradient(90deg,transparent,#EA002A)' }}/>
+              <Box sx={{ width:8, height:8, borderRadius:'50%', bgcolor:'#EA002A', boxShadow:'0 0 10px #EA002A' }}/>
+              <Box sx={{ width:40, height:'2px', background:'linear-gradient(90deg,#EA002A,transparent)' }}/>
+            </Box>
+            <Typography sx={{ color:'#555', fontFamily:"'DM Sans'", fontSize:'.95rem', mt:2.5, maxWidth:440, mx:'auto', lineHeight:1.7 }}>
+              Available for freelance projects, full-time roles, and collaborations. Let's build something great.
+            </Typography>
+          </Box>
+
+          {/* two columns */}
+          <Box sx={{ display:'flex', flexDirection:{ xs:'column', md:'row' }, gap:{ xs:5, md:6 }, alignItems:'flex-start' }}>
+
+            {/* ── LEFT ── */}
+            <Box className="ct-sr-l ct-d1" sx={{ flex:'0 0 auto', width:{ xs:'100%', md:340 } }}>
+
+              <Typography sx={{ fontFamily:"'Syne'", fontWeight:800, color:'#fff', fontSize:'1.5rem', letterSpacing:'-.5px', mb:.8 }}>
+                Let's Work Together
+              </Typography>
+              <Box sx={{ width:32, height:'3px', borderRadius:2, background:'linear-gradient(90deg,#EA002A,rgba(234,0,42,.2))', mb:2 }}/>
+              <Typography sx={{ fontFamily:"'DM Sans'", color:'#777', fontSize:'.9rem', lineHeight:1.8, mb:4 }}>
+                I help businesses build modern websites, improve SEO, and grow their online presence. Drop me a message and I'll get back to you within 24 hours.
               </Typography>
 
-              <Typography sx={{ color: '#aaa', mb: 4 }}>
-                I help businesses build modern websites, improve SEO, and grow online presence.
-              </Typography>
-
-              {CONTACT_INFO.map((item) => (
-                <Box
-                  key={item.label}
-                  sx={{ display: 'flex', gap: 2, mb: 3, alignItems: 'center' }}
-                >
-                  <Box
-                    sx={{
-                      width: 45,
-                      height: 45,
-                      borderRadius: 2,
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      color: '#EA002A',
-                      background: 'rgba(234, 0, 42, 0.1)',
-                      border: '1px solid rgba(234, 0, 42, 0.2)',
-                    }}
+              {/* contact info cards */}
+              <Box sx={{ display:'flex', flexDirection:'column', gap:1.5, mb:4 }}>
+                {CONTACT_INFO.map((item, i) => (
+                  <a
+                    key={item.label}
+                    href={item.href}
+                    target={item.href?.startsWith('http') ? '_blank' : undefined}
+                    rel={item.href?.startsWith('http') ? 'noopener noreferrer' : undefined}
+                    className={`info-card ct-sr-l ct-d${i+1}`}
                   >
-                    {item.icon}
-                  </Box>
+                    <Box className="info-icon">{item.icon}</Box>
+                    <Box sx={{ flex:1, minWidth:0 }}>
+                      <Typography sx={{ fontFamily:"'DM Sans'", fontSize:'.65rem', fontWeight:700, color:'#EA002A', letterSpacing:'1.5px', textTransform:'uppercase', mb:.2 }}>
+                        {item.label}
+                      </Typography>
+                      <Typography sx={{ fontFamily:"'DM Sans'", color:'#ddd', fontSize:'.84rem', fontWeight:600, overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>
+                        {item.value}
+                      </Typography>
+                      <Typography sx={{ fontFamily:"'DM Sans'", color:'#555', fontSize:'.7rem', mt:.2 }}>
+                        {item.sub}
+                      </Typography>
+                    </Box>
+                    <Typography sx={{ color:'#EA002A', fontSize:'.8rem', flexShrink:0 }}>→</Typography>
+                  </a>
+                ))}
+              </Box>
 
-                  <Box>
-                    <Typography sx={{ color: '#EA002A', fontSize: 12 }}>
-                      {item.label}
+              {/* availability badge */}
+              <Box sx={{
+                display:'inline-flex', alignItems:'center', gap:1.5,
+                px:2.5, py:1.2, borderRadius:'30px',
+                background:'rgba(34,197,94,.08)', border:'1px solid rgba(34,197,94,.3)',
+              }}>
+                <Box sx={{ width:8, height:8, borderRadius:'50%', bgcolor:'#22c55e', boxShadow:'0 0 8px #22c55e', animation:'glowPulse 2s infinite' }}/>
+                <Typography sx={{ fontFamily:"'DM Sans'", fontSize:'.8rem', fontWeight:700, color:'#22c55e' }}>
+                  Available for new projects
+                </Typography>
+              </Box>
+            </Box>
+
+            {/* ── RIGHT: FORM ── */}
+            <Box className="ct-sr-r ct-d2" sx={{ flex:1 }}>
+              <Box sx={{
+                p:{ xs:'28px 22px', md:'36px 32px' },
+                borderRadius:'20px',
+                background:'linear-gradient(145deg,#141414,#0d0d0d)',
+                border:'1px solid rgba(234,0,42,.22)',
+                boxShadow:'0 0 60px rgba(0,0,0,.6), 0 0 0 1px rgba(234,0,42,.08)',
+                position:'relative', overflow:'hidden',
+                animation:'borderGlow 4s ease-in-out infinite',
+              }}>
+                {/* scan line */}
+                <Box sx={{ position:'absolute', left:0, right:0, height:'2px', background:'linear-gradient(90deg,transparent,rgba(234,0,42,.4),transparent)', top:'-5%', animation:'scanLine 6s linear infinite', pointerEvents:'none', zIndex:2 }}/>
+
+                {/* corner glow */}
+                <Box sx={{ position:'absolute', top:-30, right:-30, width:100, height:100, borderRadius:'50%', background:'rgba(234,0,42,.12)', filter:'blur(30px)' }}/>
+                <Box sx={{ position:'absolute', bottom:-30, left:-30, width:80, height:80, borderRadius:'50%', background:'rgba(234,0,42,.08)', filter:'blur(24px)' }}/>
+
+                {success ? (
+                  /* ── SUCCESS STATE ── */
+                  <Box className="success-wrap">
+                    <Box sx={{ fontSize:'4rem', mb:2, display:'block' }}>✅</Box>
+                    <Typography sx={{ fontFamily:"'Syne'", fontWeight:800, color:'#fff', fontSize:'1.5rem', mb:1 }}>
+                      Message Sent!
+                    </Typography>
+                    <Typography sx={{ fontFamily:"'DM Sans'", color:'#888', fontSize:'.9rem', mb:3, lineHeight:1.7 }}>
+                      Thank you for reaching out. I'll get back to you within 24 hours.
+                    </Typography>
+                    <button
+                      className="ct-submit"
+                      style={{ width:'auto', padding:'10px 28px' }}
+                      onClick={() => setSuccess(false)}
+                    >
+                      Send Another →
+                    </button>
+                  </Box>
+                ) : (
+                  /* ── FORM ── */
+                  <>
+                    <Typography sx={{ fontFamily:"'Syne'", fontWeight:800, color:'#fff', fontSize:'1.3rem', mb:.5, letterSpacing:'-.3px' }}>
+                      Send a Message
+                    </Typography>
+                    <Typography sx={{ fontFamily:"'DM Sans'", color:'#555', fontSize:'.82rem', mb:3 }}>
+                      Fill in the details below and I'll respond promptly.
                     </Typography>
 
-                    {item.href ? (
-                      <Typography
-                        component="a"
-                        href={item.href}
-                        sx={{ color: '#ccc', textDecoration: 'none' }}
+                    <form onSubmit={handleSubmit} style={{ position:'relative', zIndex:1 }}>
+
+                      {/* row 1 */}
+                      <Box sx={{ display:'flex', gap:2, flexDirection:{ xs:'column', sm:'row' }, mb:2 }}>
+                        <Box sx={{ flex:1 }}>
+                          <label className="ct-label">Full Name *</label>
+                          <input className="ct-field" placeholder="Ahsan Ali" value={form.name} onChange={set('name')} required/>
+                        </Box>
+                        <Box sx={{ flex:1 }}>
+                          <label className="ct-label">Email Address *</label>
+                          <input className="ct-field" type="email" placeholder="ahsan@example.com" value={form.email} onChange={set('email')} required/>
+                        </Box>
+                      </Box>
+
+                      {/* row 2 */}
+                      <Box sx={{ display:'flex', gap:2, flexDirection:{ xs:'column', sm:'row' }, mb:2 }}>
+                        <Box sx={{ flex:1 }}>
+                          <label className="ct-label">Phone Number</label>
+                          <input className="ct-field" placeholder="+92 300 0000000" value={form.phone} onChange={set('phone')}/>
+                        </Box>
+                        <Box sx={{ flex:1 }}>
+                          <label className="ct-label">Subject *</label>
+                          <input className="ct-field" placeholder="Project Inquiry" value={form.subject} onChange={set('subject')} required/>
+                        </Box>
+                      </Box>
+
+                      {/* message */}
+                      <Box sx={{ mb:2.5 }}>
+                        <label className="ct-label">Your Message *</label>
+                        <textarea className="ct-field" rows={5} placeholder="Tell me about your project, goals, budget and timeline…" value={form.message} onChange={set('message')} required/>
+                      </Box>
+
+                      {/* error */}
+                      {error && (
+                        <Box sx={{ mb:2, p:1.5, borderRadius:'10px', background:'rgba(234,0,42,.1)', border:'1px solid rgba(234,0,42,.3)' }}>
+                          <Typography sx={{ fontFamily:"'DM Sans'", color:'#ff6b6b', fontSize:'.84rem' }}>
+                            ⚠️ {error}
+                          </Typography>
+                        </Box>
+                      )}
+
+                      {/* submit */}
+                      <button
+                        ref={btnRef}
+                        type="submit"
+                        className="ct-submit"
+                        disabled={loading}
+                        onClick={addRipple}
                       >
-                        {item.value}
-                      </Typography>
-                    ) : (
-                      <Typography sx={{ color: '#ccc' }}>
-                        {item.value}
-                      </Typography>
-                    )}
-                  </Box>
-                </Box>
-              ))}
-            </motion.div>
+                        {loading
+                          ? <Box sx={{ display:'flex', alignItems:'center', gap:1, justifyContent:'center' }}>
+                              <CircularProgress size={18} sx={{ color:'#fff' }}/>
+                              <span>Sending…</span>
+                            </Box>
+                          : '🚀 Send Message'
+                        }
+                      </button>
+                    </form>
+                  </>
+                )}
+              </Box>
+            </Box>
           </Box>
+        </Container>
 
-          {/* RIGHT SIDE FORM (UPDATED) */}
-          <Box sx={{ flex: 1, minWidth: 300 }}>
-            <motion.div
-              initial={{ opacity: 0, x: 40 }}
-              whileInView={{ opacity: 1, x: 0 }}
-            >
-              <Paper
-                sx={{
-                  p: 4,
-                  bgcolor: '#0d0d0d',
-                  borderRadius: '20px',
-                  border: '1px solid rgba(234,0,42,0.4)',
-                  boxShadow: '0 0 40px rgba(234,0,42,0.6)',
-                }}
-              >
-                <Typography sx={{ color: '#fff', mb: 3, fontWeight: 700, fontSize: 28 }}>
-                  Contact <span style={{ color: '#EA002A' }}>Me!</span>
-                </Typography>
-
-                <form onSubmit={handleSubmit}>
-
-                  {/* ROW 1 */}
-                  <Box sx={{ display: 'flex', gap: 2 }}>
-                    <TextField
-                      fullWidth
-                      placeholder="Full Name"
-                      value={form.name}
-                      onChange={handleChange('name')}
-                      required
-                      sx={neonInput}
-                    />
-
-                    <TextField
-                      fullWidth
-                      placeholder="Email Address"
-                      value={form.email}
-                      onChange={handleChange('email')}
-                      required
-                      sx={neonInput}
-                    />
-                  </Box>
-
-                  {/* ROW 2 */}
-                  <Box sx={{ display: 'flex', gap: 2 }}>
-                    <TextField
-                      fullWidth
-                      placeholder="Phone Number"
-                      value={form.phone}
-                      onChange={handleChange('phone')}
-                      sx={neonInput}
-                    />
-
-                    <TextField
-                      fullWidth
-                      placeholder="Email Subject"
-                      value={form.subject}
-                      onChange={handleChange('subject')}
-                      sx={neonInput}
-                    />
-                  </Box>
-
-                  {/* MESSAGE */}
-                  <TextField
-                    fullWidth
-                    multiline
-                    rows={5}
-                    placeholder="Your Message"
-                    value={form.message}
-                    onChange={handleChange('message')}
-                    required
-                    sx={neonInput}
-                  />
-
-                  {/* BUTTON */}
-                  <Button
-                    type="submit"
-                    fullWidth
-                    disabled={loading}
-                    sx={{
-                      mt: 2,
-                      py: 1.8,
-                      borderRadius: '10px',
-                      fontSize: '18px',
-                      fontWeight: 600,
-                      color: '#fff',
-                      background: '#EA002A',
-                      boxShadow: '0 0 25px rgba(234,0,42,0.9)',
-                      transition: '0.3s',
-
-                      '&:hover': {
-                        boxShadow: '0 0 40px rgba(234,0,42,1)',
-                        background: '#ff0033',
-                      },
-                    }}
-                  >
-                    {loading ? (
-                      <CircularProgress size={22} sx={{ color: '#fff' }} />
-                    ) : (
-                      'Send Message'
-                    )}
-                  </Button>
-
-                </form>
-              </Paper>
-            </motion.div>
-          </Box>
-
+        {/* bottom divider */}
+        <Box sx={{ position:'absolute', bottom:-1, left:0, width:'100%', overflow:'hidden', lineHeight:0, zIndex:3 }}>
+          <svg viewBox="0 0 1440 60" preserveAspectRatio="none" style={{ height:60, width:'100%' }}>
+            <polygon points="0,60 1440,0 1440,60" fill="#0a0a0a"/>
+          </svg>
         </Box>
-      </Container>
-    </Box>
+      </Box>
+    </>
   )
 }

@@ -107,31 +107,35 @@ const EXP_CSS = `
   }
 `
 
-const FALLBACK = [
+// ─── Static experience data ───────────────────────────────────────────────────
+const EXPERIENCES = [
   {
-    _id:'1', company:'TechCorp Solutions', role:'Senior Frontend Developer',
-    type:'Full-time', location:'Remote', startDate:'2022-01', endDate:null, isCurrent:true, logo:null,
-    description:'Led the development of a large-scale SaaS dashboard using Next.js and TypeScript. Improved Core Web Vitals scores by 40% and mentored a team of 3 junior developers.',
-    achievements:['Improved page load speed by 40%','Built reusable component library used across 5 products','Led migration from CRA to Next.js 13'],
-    skills:['Next.js','TypeScript','React','Tailwind CSS','GraphQL'], order:0,
+    _id:'1', company:'Whetstonze Technologies', role:'Full-Stack Developer',
+    type:'Full-time', location:'onsite', startDate:'2025-03', endDate:null, isCurrent:true, logo:null,
+    description:'Built modern full-stack SaaS platforms with Next.js, React, TypeScript, Node.js, and MongoDB, focusing on scalable architecture, SEO optimization, fast performance, and exceptional user experience.',
+    achievements:['Improved page load speed by 40%',
+    'Built reusable component library used across 5 products',
+    'Led migration from CRA to Next.js 13, improving SEO and performance'],
+    skills:['Next.js','TypeScript','React','GraphQL','Node.js','MongoDB','Tailwind CSS', 'Material UI'], order:0,
   },
   {
-    _id:'2', company:'Digital Agency X', role:'Frontend Developer',
-    type:'Full-time', location:'Lahore, Pakistan', startDate:'2020-06', endDate:'2021-12', isCurrent:false, logo:null,
-    description:'Built and maintained 15+ client websites with strong SEO focus. Collaborated closely with designers to bring Figma mockups to pixel-perfect reality.',
-    achievements:['Delivered 15+ client projects on time','Ranked 3 websites #1 on Google','Reduced bounce rate by 28% through UX improvements'],
-    skills:['React','JavaScript','SEO','CSS','WordPress'], order:1,
+    _id:'2', company:'Code labe Innovation', role:'Mern stack Developer',
+    type:'Full-time', location:'Lahore, Pakistan', startDate:'2025-01', endDate:'2025-03', isCurrent:false, logo:null,
+    description:'Worked as a Junior MERN Stack Developer, building responsive and SEO-friendly web applications using MongoDB, Express.js, React, and Node.js. Collaborated with senior developers and designers to transform Figma designs into pixel-perfect, high-performance websites while improving user experience and frontend functionality.',
+    achievements:[ 'Delivered 15+ client projects on time',
+    'Ranked 3 websites #1 on Google',
+    'Reduced bounce rate by 28% through UX improvements'],
+    skills:['Node.js','MongoDB','React','SEO','Figma'], order:1,
   },
   {
-    _id:'3', company:'Freelance', role:'Full-Stack Developer & SEO Consultant',
+    _id:'3', company:'Spiral Labs ', role:'AI Engineer Intern',
     type:'Freelance', location:'Remote', startDate:'2019-01', endDate:'2020-05', isCurrent:false, logo:null,
-    description:'Worked with startups and small businesses to design, develop, and optimise their web presence. Managed end-to-end projects from requirement gathering to deployment.',
-    achievements:['Helped 10+ businesses grow organic traffic','Built 3 e-commerce stores from scratch','Maintained 5-star rating on Upwork'],
-    skills:['Node.js','MongoDB','React','SEO','Figma'], order:2,
+    description:'Built AI chatbots and voice agents for real-world use, integrated AI APIs, and optimized prompts and workflows to improve accuracy and performance. Worked with the team to test and enhance AI features for production.',
+    achievements:['Successfully built and deployed AI chatbots and voice agents for real-world applications, integrating multiple AI APIs to improve automation and system performance. Enhanced prompt engineering to increase response accuracy and reliability, and contributed to testing and optimizing AI features for production environments.'],
+    skills:['python','ChatGPT','OpenAI API','Gemini API','Scikit-learn','NumPy','Pandas'], order:2,
   },
 ]
 
-// ✅ Fixed — no Math.random()
 const PARTICLES = [
   { id:0,  top:'5%',  left:'8%',  size:'3px', delay:'0s',   dur:'6s'  },
   { id:1,  top:'12%', left:'72%', size:'2px', delay:'1.2s', dur:'8s'  },
@@ -169,8 +173,6 @@ function ExpCard({ exp, index }) {
   const dotRef  = useRef(null)
   const cardRef = useRef(null)
   const isLeft  = index % 2 === 0
-
-  // ✅ Fixed — static lookup, no Math.min at render time
   const delayClass = DELAY_CLASSES[index < 6 ? index : 5]
 
   useEffect(() => {
@@ -296,19 +298,10 @@ function ExpCard({ exp, index }) {
 }
 
 export default function ExperienceSection() {
-  const [experiences, setExperiences] = useState([])
-  const [loading, setLoading]         = useState(true)
   const lineRef = useRef(null)
   const wrapRef = useRef(null)
 
-  useEffect(() => {
-    fetch('/api/experience')
-      .then(r => r.json())
-      .then(d => setExperiences(Array.isArray(d) ? d : d?.experiences || FALLBACK))
-      .catch(() => setExperiences(FALLBACK))
-      .finally(() => setLoading(false))
-  }, [])
-
+  // scroll reveal for .ex-sr elements
   useEffect(() => {
     const io = new IntersectionObserver(
       entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in') }),
@@ -318,6 +311,7 @@ export default function ExperienceSection() {
     return () => io.disconnect()
   }, [])
 
+  // timeline line draw trigger
   useEffect(() => {
     const io = new IntersectionObserver(
       entries => entries.forEach(e => { if (e.isIntersecting) lineRef.current?.classList.add('run') }),
@@ -325,9 +319,7 @@ export default function ExperienceSection() {
     )
     if (wrapRef.current) io.observe(wrapRef.current)
     return () => io.disconnect()
-  }, [experiences])
-
-  const list = experiences.length ? experiences : FALLBACK
+  }, [])
 
   return (
     <>
@@ -395,17 +387,13 @@ export default function ExperienceSection() {
 
           <Box ref={wrapRef} sx={{ position:'relative', pb:4 }}>
             <Box ref={lineRef} className="tl-line" sx={{ display:{ xs:'none', md:'block' } }}/>
-            {loading
-              ? <Box sx={{ textAlign:'center', py:10 }}>
-                  <Typography sx={{ color:'#EA002A', fontFamily:"'Syne'", fontWeight:700 }}>Loading...</Typography>
-                </Box>
-              : list.map((exp, i) => (
-                  <ExpCard key={exp._id || i} exp={exp} index={i} lineRef={lineRef} />
-                ))
-            }
+            {EXPERIENCES.map((exp, i) => (
+              <ExpCard key={exp._id} exp={exp} index={i} lineRef={lineRef} />
+            ))}
           </Box>
         </Container>
 
+        {/* marquee */}
         <Box sx={{
           mt:{ xs:6, md:8 }, py:2.5,
           borderTop:'1px solid rgba(255,255,255,.06)',
@@ -414,7 +402,7 @@ export default function ExperienceSection() {
           background:'rgba(234,0,42,.04)',
         }}>
           <Box sx={{ display:'flex', animation:'marqueeScroll 26s linear infinite', whiteSpace:'nowrap' }}>
-            {[...list,...list].map((e,i) => (
+            {[...EXPERIENCES,...EXPERIENCES].map((e,i) => (
               <Box key={i} component="span" sx={{
                 display:'inline-flex', alignItems:'center', gap:1.5, mx:4,
                 fontFamily:"'Syne'", fontWeight:700, fontSize:'.75rem',

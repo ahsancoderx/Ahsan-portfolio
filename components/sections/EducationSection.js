@@ -1,4 +1,3 @@
-// src/components/sections/EducationSection.js
 'use client';
 
 import { useRef } from 'react';
@@ -14,9 +13,6 @@ import PhoneAndroidIcon  from '@mui/icons-material/PhoneAndroid';
 import SmartToyIcon      from '@mui/icons-material/SmartToy';
 import GTranslateIcon    from '@mui/icons-material/GTranslate';
 import { motion, useInView } from 'framer-motion';
-import dynamic from 'next/dynamic';
-
-
 
 /* ─── DATA ─────────────────────────────────────────────── */
 const EDUCATION = [
@@ -34,7 +30,7 @@ const EDUCATION = [
     inst:   'Government Graduate College kot radha kishan',
     period: '2020 – 2022',
     loc:    'kot radha kishan, Punjab, Pakistan',
-    status: "complete",
+    status: 'complete',
   },
   {
     icon:   <ApartmentIcon sx={{ fontSize: 32 }} />,
@@ -42,16 +38,16 @@ const EDUCATION = [
     inst:   'Government hight School ',
     period: '2018 – 2020',
     loc:    'kot radha kishan, Punjab, Pakistan',
-    status: "complete",
+    status: 'complete',
   },
 ];
 
 const INTERESTS = [
   { icon: <LanguageIcon      sx={{ fontSize: 20 }} />, label: 'Full stack development'   },
-  { icon: <PsychologyIcon    sx={{ fontSize: 20 }} />, label: 'Problem Solving'   },
-  { icon: <DeveloperModeIcon sx={{ fontSize: 20 }} />, label: 'Software Development'      },
-  { icon: <PhoneAndroidIcon  sx={{ fontSize: 20 }} />, label: 'Mobile App Development'    },
-  { icon: <SmartToyIcon      sx={{ fontSize: 20 }} />, label: 'AI & Machine Learning' },
+  { icon: <PsychologyIcon    sx={{ fontSize: 20 }} />, label: 'Problem Solving'          },
+  { icon: <DeveloperModeIcon sx={{ fontSize: 20 }} />, label: 'Software Development'     },
+  { icon: <PhoneAndroidIcon  sx={{ fontSize: 20 }} />, label: 'Mobile App Development'   },
+  { icon: <SmartToyIcon      sx={{ fontSize: 20 }} />, label: 'AI & Machine Learning'    },
 ];
 
 const LANGUAGES = [
@@ -219,6 +215,7 @@ function LangRow({ lang, index }) {
 function PanelHeader({ icon, title, index }) {
   const ref    = useRef(null);
   const inView = useInView(ref, { once: false, margin: '-60px' });
+
   return (
     <motion.div
       ref={ref}
@@ -253,8 +250,6 @@ export default function EducationSection() {
         overflow: 'hidden',
       }}
     >
-
-      {/* Content above particles — same Container as ContactSection */}
       <Box sx={{ position: 'relative', zIndex: 1 }}>
         <Container maxWidth="lg">
 
@@ -267,19 +262,21 @@ export default function EducationSection() {
           >
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 8 }}>
               <Box sx={{ width: 4, height: 36, bgcolor: '#EA002A', borderRadius: 2, flexShrink: 0 }} />
-              <Typography variant="h4" sx={{ fontFamily:"'Syne',sans-serif", fontWeight:800,
-              fontSize:{ xs:'2.4rem', md:'3.2rem' },
-              letterSpacing:'-1px', lineHeight:1.05,
-              background:'linear-gradient(90deg,#fff 40%,#EA002A 90%)',
-              backgroundSize:'200% auto',
-              WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent',
-              animation:'shimmerText 5s linear infinite', }}>
+              <Typography variant="h4" sx={{
+                fontFamily:"'Syne',sans-serif", fontWeight:800,
+                fontSize:{ xs:'2.4rem', md:'3.2rem' },
+                letterSpacing:'-1px', lineHeight:1.05,
+                background:'linear-gradient(90deg,#fff 40%,#EA002A 90%)',
+                backgroundSize:'200% auto',
+                WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent',
+                animation:'shimmerText 5s linear infinite',
+              }}>
                 Academic Journey
               </Typography>
             </Box>
           </motion.div>
 
-          {/* Two-column flex layout — same pattern as ContactSection */}
+          {/* Two-column flex layout */}
           <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
 
             {/* ── Left: Timeline ── */}
@@ -293,15 +290,7 @@ export default function EducationSection() {
             <Box sx={{ flex: '1 1 35%', minWidth: 280 }}>
 
               {/* Interests */}
-              <Box
-                sx={{
-                  bgcolor: '#0d0d0d',
-                  border: '1px solid #1a1a1a',
-                  borderRadius: 3,
-                  p: 3,
-                  mb: 3,
-                }}
-              >
+              <Box sx={{ bgcolor: '#0d0d0d', border: '1px solid #1a1a1a', borderRadius: 3, p: 3, mb: 3 }}>
                 <PanelHeader icon={<LightbulbIcon sx={{ fontSize: 20 }} />} title="Interests" index={0} />
                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
                   {INTERESTS.map((item, i) => (
@@ -311,14 +300,7 @@ export default function EducationSection() {
               </Box>
 
               {/* Languages */}
-              <Box
-                sx={{
-                  bgcolor: '#0d0d0d',
-                  border: '1px solid #1a1a1a',
-                  borderRadius: 3,
-                  p: 3,
-                }}
-              >
+              <Box sx={{ bgcolor: '#0d0d0d', border: '1px solid #1a1a1a', borderRadius: 3, p: 3 }}>
                 <PanelHeader icon={<GTranslateIcon sx={{ fontSize: 20 }} />} title="Languages" index={1} />
                 {LANGUAGES.map((lang, i) => (
                   <LangRow key={lang.name} lang={lang} index={i} />

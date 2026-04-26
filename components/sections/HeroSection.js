@@ -6,7 +6,7 @@ import GitHubIcon from '@mui/icons-material/GitHub';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import DownloadIcon from '@mui/icons-material/Download';
 
-const typingWords = ['Frontend Developer', 'SEO Expert', 'UI/UX Designer', 'React Developer'];
+const typingWords = ['Full-Stack Developer','AI/ML Engineer', 'Frontend Developer','Backend Developer', 'UI/UX Designer', 'React Developer', 'AI Enthusiast','Tech Innovator','chatbot developer'];
 
 const GLOBAL_CSS = `
   @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500&display=swap');
@@ -116,7 +116,7 @@ const RINGS_CONFIG = [
   },
 ];
 
-// ✅ یہ لگائیں - fixed values، UI بالکل ویسی ہی رہے گی
+
 const PARTICLES = [
   { id:0,  top:'8%',  left:'12%', size:'3px', delay:'0s',    dur:'6s'   },
   { id:1,  top:'15%', left:'78%', size:'2px', delay:'1.2s',  dur:'8s'   },
@@ -247,7 +247,7 @@ export default function HeroSection() {
               color:'#888', mb:4, lineHeight:1.78,
               fontSize:{ xs:'.93rem', md:'1rem' }, maxWidth:420,
             }}>
-              I design and build modern, responsive websites with clean UI and strong performance.
+              Full-Stack Developer specializing in MERN Stack, AI-powered applications, and modern web solutions that are fast, scalable, and user-focused.
             </Typography>
 
             <Box className="sr-left d4" sx={{ display:'flex', gap:2, flexWrap:'wrap' }}>

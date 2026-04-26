@@ -1,13 +1,22 @@
 // src/components/layout/Navbar.js
 'use client';
+
 import { useState, useEffect } from 'react';
 import {
-  AppBar, Toolbar, Typography, Button, Box, IconButton,
-  Drawer, List, ListItem, ListItemText, useScrollTrigger,
+  AppBar,
+  Toolbar,
+  Typography,
+  Button,
+  Box,
+  IconButton,
+  Drawer,
+  List,
+  ListItem,
+  ListItemText,
 } from '@mui/material';
+
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close';
-import Link from 'next/link';
 
 const navLinks = [
   { label: 'Home', href: '#home' },
@@ -24,6 +33,7 @@ export default function Navbar() {
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
     window.addEventListener('scroll', handleScroll);
+
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -40,10 +50,16 @@ export default function Navbar() {
         }}
       >
         <Toolbar sx={{ justifyContent: 'space-between', px: { xs: 2, md: 6 } }}>
+          
           {/* Logo */}
           <Typography
             variant="h5"
-            sx={{ fontWeight: 800, color: ' #EA002A', fontFamily: 'Poppins', letterSpacing: 1 }}
+            sx={{
+              fontWeight: 800,
+              color: '#EA002A',
+              fontFamily: 'Poppins',
+              letterSpacing: 1,
+            }}
           >
             Ahsan
           </Typography>
@@ -58,7 +74,7 @@ export default function Navbar() {
                   color: '#ccc',
                   fontWeight: 500,
                   fontSize: '0.95rem',
-                  '&:hover': { color: ' #EA002A' },
+                  '&:hover': { color: '#EA002A' },
                 }}
               >
                 {link.label}
@@ -68,7 +84,7 @@ export default function Navbar() {
 
           {/* Mobile Menu Icon */}
           <IconButton
-            sx={{ display: { md: 'none' }, color: ' #EA002A' }}
+            sx={{ display: { md: 'none' }, color: '#EA002A' }}
             onClick={() => setMobileOpen(true)}
           >
             <MenuIcon />
@@ -77,13 +93,24 @@ export default function Navbar() {
       </AppBar>
 
       {/* Mobile Drawer */}
-      <Drawer anchor="right" open={mobileOpen} onClose={() => setMobileOpen(false)}>
+      <Drawer
+        anchor="right"
+        open={mobileOpen}
+        onClose={() => setMobileOpen(false)}
+      >
         <Box sx={{ width: 260, bgcolor: '#0a0a0a', height: '100%', pt: 2 }}>
+          
+          {/* Close Button */}
           <Box sx={{ display: 'flex', justifyContent: 'flex-end', px: 2 }}>
-            <IconButton onClick={() => setMobileOpen(false)} sx={{ color: ' #EA002A' }}>
+            <IconButton
+              onClick={() => setMobileOpen(false)}
+              sx={{ color: '#EA002A' }}
+            >
               <CloseIcon />
             </IconButton>
           </Box>
+
+          {/* Links */}
           <List>
             {navLinks.map((link) => (
               <ListItem

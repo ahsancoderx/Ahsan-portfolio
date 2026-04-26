@@ -67,7 +67,6 @@ const SKILLS_CSS = `
   .skill-card:hover .sk-icon-wrap { animation: float3d 2.5s ease-in-out infinite; }
   .skill-card:hover .sk-bar-fill  { animation: shimmerBar 2s linear infinite; }
 
-  /* icon wrapper — gives the "lifted" 3-D look */
   .sk-icon-wrap {
     width: 64px; height: 64px;
     border-radius: 16px;
@@ -98,7 +97,6 @@ const SKILLS_CSS = `
     transform: scale(1.1) translateZ(8px);
   }
 
-  /* skill bar inside card */
   .sk-bar-track {
     height: 5px; border-radius: 4px;
     background: rgba(255,255,255,.07);
@@ -115,7 +113,6 @@ const SKILLS_CSS = `
   }
   .sk-bar-fill.run { width: var(--w); }
 
-  /* category tab pill */
   .cat-tab {
     font-family: 'DM Sans', sans-serif;
     font-weight: 600; font-size: .78rem;
@@ -141,7 +138,6 @@ const SKILLS_CSS = `
     animation: tabGlow 2s ease-in-out infinite;
   }
 
-  /* proficiency badge */
   .pct-badge {
     position: absolute; top: 12px; right: 12px;
     font-family: 'Syne', sans-serif; font-weight: 800;
@@ -153,7 +149,7 @@ const SKILLS_CSS = `
   }
 `
 
-// ─── Skills data with devicon URLs ───────────────────────────────────────────
+// ─── Skills data ──────────────────────────────────────────────────────────────
 const ALL_SKILLS = [
   { name:'HTML / CSS',    proficiency:95, category:'frontend', bg:'linear-gradient(135deg,#e44d26,#f06529)', icon:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg' },
   { name:'JavaScript',   proficiency:88, category:'frontend', bg:'linear-gradient(135deg,#f7df1e,#e6c800)', icon:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg' },
@@ -168,7 +164,7 @@ const ALL_SKILLS = [
   { name:'SEO',          proficiency:90, category:'tools',    bg:'linear-gradient(135deg,#EA002A,#ff4d6d)', icon:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg' },
   { name:'Git / GitHub', proficiency:84, category:'tools',    bg:'linear-gradient(135deg,#1b1f23,#f05032)', icon:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg' },
   { name:'Figma',        proficiency:78, category:'design',   bg:'linear-gradient(135deg,#1e1e1e,#a259ff)', icon:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg' },
-  { name:'Photoshop',    proficiency:72, category:'design',   bg:'linear-gradient(135deg,#001e36,#31a8ff)', icon:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/photoshop/photoshop-original.svg' },
+  { name:'Matrial UI',    proficiency:72, category:'design',   bg:'linear-gradient(135deg,#001e36,#31a8ff)', icon:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/materialui/materialui-original.svg' },
 ]
 
 const CATEGORIES = ['all','frontend','backend','database','tools','design']
@@ -191,11 +187,11 @@ const PARTICLES = [
   { id:14, top:'65%', left:'12%', size:'3px', delay:'3.5s', dur:'7s'  },
   { id:15, top:'75%', left:'50%', size:'2px', delay:'1.9s', dur:'12s' },
 ]
-// ─── 3-D Skill Card ──────────────────────────────────────────────────────────
+
+// ─── 3-D Skill Card ───────────────────────────────────────────────────────────
 function SkillCard3D({ skill, index, started }) {
   const cardRef = useRef(null)
 
-  // tilt on mouse move
   const handleMouseMove = (e) => {
     const card = cardRef.current
     if (!card) return
@@ -204,9 +200,8 @@ function SkillCard3D({ skill, index, started }) {
     const y = (e.clientY - rect.top)  / rect.height - 0.5
     card.style.transform = `rotateX(${-y * 18}deg) rotateY(${x * 18}deg) translateY(-10px) scale(1.04)`
   }
-  const handleMouseLeave = (e) => {
-    if (cardRef.current)
-      cardRef.current.style.transform = ''
+  const handleMouseLeave = () => {
+    if (cardRef.current) cardRef.current.style.transform = ''
   }
 
   return (
@@ -220,15 +215,12 @@ function SkillCard3D({ skill, index, started }) {
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
       >
-        {/* % badge */}
         <Box className="pct-badge">{skill.proficiency}%</Box>
 
-        {/* icon */}
         <Box className="sk-icon-wrap" sx={{ background: skill.bg }}>
           <img src={skill.icon} alt={skill.name} className="sk-icon-img" />
         </Box>
 
-        {/* name */}
         <Typography sx={{
           fontFamily:"'DM Sans'", fontWeight:700, fontSize:'.82rem',
           color:'#e0e0e0', letterSpacing:'.2px', lineHeight:1.2,
@@ -236,7 +228,6 @@ function SkillCard3D({ skill, index, started }) {
           {skill.name}
         </Typography>
 
-        {/* bar */}
         <Box className="sk-bar-track">
           <Box
             className={`sk-bar-fill${started ? ' run' : ''}`}
@@ -250,21 +241,9 @@ function SkillCard3D({ skill, index, started }) {
 
 // ─── Main ─────────────────────────────────────────────────────────────────────
 export default function SkillsSection() {
-  const [skills, setSkills]       = useState([])
   const [activeTab, setActiveTab] = useState('all')
-  const [started, setStarted]     = useState(false)
+  const [started,   setStarted]   = useState(false)
   const gridRef = useRef(null)
-
-  useEffect(() => {
-    fetch('/api/skills')
-      .then(r => r.json())
-      .then(d => {
-        if (Array.isArray(d)) setSkills(d)
-        else if (Array.isArray(d?.skills)) setSkills(d.skills)
-        else setSkills([])
-      })
-      .catch(() => setSkills([]))
-  }, [])
 
   // scroll reveal
   useEffect(() => {
@@ -286,8 +265,9 @@ export default function SkillsSection() {
     return () => io.disconnect()
   }, [])
 
-  const base = skills.length ? skills : ALL_SKILLS
-  const filtered = activeTab === 'all' ? base : base.filter(s => s.category === activeTab)
+  const filtered = activeTab === 'all'
+    ? ALL_SKILLS
+    : ALL_SKILLS.filter(s => s.category === activeTab)
 
   return (
     <>

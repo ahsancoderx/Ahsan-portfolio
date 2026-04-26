@@ -4,7 +4,7 @@ import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import theme from '@/theme/theme';
 import CustomCursor from '@/components/layout/CustomCursor';
-import connectDB from '@/lib/mongodb'
+import WhatsAppButton from '@/components/sections/WhatsAppButton';   // ← ADD THIS
 
 export const metadata = {
   title: 'Ahsan Ali | Frontend Developer & SEO Expert',
@@ -19,7 +19,6 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
-  
   return (
     <html lang="en">
       <head>
@@ -31,22 +30,27 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body style={{ backgroundColor: '#0a0a0a' }}>
-  
 
-  <AppRouterCacheProvider>
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <CustomCursor />
+        <AppRouterCacheProvider>
+          <ThemeProvider theme={theme}>
+            <CssBaseline />
+            <CustomCursor />
 
-      {/* ALL PAGES */}
-      <div style={{ position: 'relative', zIndex: 1 }}>
-        {children}
-      </div>
+            {/* ALL PAGES */}
+            <div style={{ position: 'relative', zIndex: 1 }}>
+              {children}
+            </div>
 
-    </ThemeProvider>
-  </AppRouterCacheProvider>
+            {/* WhatsApp floating button — shows on every page */}
+            <WhatsAppButton
+              phone="923271348097"
+              message="Hi Ahsan! I visited your portfolio and would like to get in touch."
+            />
 
-</body>
+          </ThemeProvider>
+        </AppRouterCacheProvider>
+
+      </body>
     </html>
   );
 }
