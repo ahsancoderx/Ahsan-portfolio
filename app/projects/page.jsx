@@ -39,7 +39,7 @@ const PAGE_CSS = `
     font-family:'DM Sans';font-size:.73rem;font-weight:700;
     padding:5px 13px;border-radius:20px;text-decoration:none;
     border:1px solid rgba(255,255,255,.1);color:#777;background:rgba(255,255,255,.03);
-    transition:all .25s;
+    transition:all .25s;cursor:pointer;
   }
   .proj-link2:hover { color:#fff;border-color:rgba(234,0,42,.4);background:rgba(234,0,42,.08); }
   .proj-link2.live2 { border-color:rgba(234,0,42,.3);color:#EA002A;background:rgba(234,0,42,.07); }
@@ -77,6 +77,13 @@ const PARTICLES = Array.from({ length: 12 }, (_, i) => ({
 
 function AllProjectCard({ project, index }) {
   const [imgErr, setImgErr] = useState(false)
+
+  const openUrl = (e, url) => {
+    e.stopPropagation()
+    e.preventDefault()
+    window.open(url, '_blank', 'noopener,noreferrer')
+  }
+
   return (
     <Link href={`/projects/${project.id}`} style={{ textDecoration:'none', display:'block' }}>
       <Box className="proj-card2" style={{ animationDelay:`${(index%6)*0.08}s` }}>
@@ -115,9 +122,15 @@ function AllProjectCard({ project, index }) {
             {project.tags.length>3 && <span className="proj-tag2">+{project.tags.length-3}</span>}
           </Box>
           <Box sx={{ display:'flex',flexWrap:'wrap',gap:.75 }} onClick={e => e.preventDefault()}>
-            {project.liveUrl   && <a href={project.liveUrl}   target="_blank" rel="noopener noreferrer" className="proj-link2 live2" onClick={e=>e.stopPropagation()}>🔴 Live</a>}
-            {project.githubUrl && <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" className="proj-link2"       onClick={e=>e.stopPropagation()}>⌥ GitHub</a>}
-            {project.videoUrl  && <a href={project.videoUrl}  target="_blank" rel="noopener noreferrer" className="proj-link2"       onClick={e=>e.stopPropagation()}>▶ Demo</a>}
+            {project.liveUrl && (
+              <span className="proj-link2 live2" onClick={e => openUrl(e, project.liveUrl)}>🔴 Live</span>
+            )}
+            {project.githubUrl && (
+              <span className="proj-link2" onClick={e => openUrl(e, project.githubUrl)}>⌥ GitHub</span>
+            )}
+            {project.videoUrl && (
+              <span className="proj-link2" onClick={e => openUrl(e, project.videoUrl)}>▶ Demo</span>
+            )}
           </Box>
         </Box>
         <Box sx={{ position:'absolute',bottom:-18,right:-18,width:70,height:70,borderRadius:'50%',background:'rgba(234,0,42,.09)',filter:'blur(20px)' }}/>

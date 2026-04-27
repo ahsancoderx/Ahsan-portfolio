@@ -8,6 +8,7 @@ import InstagramIcon from '@mui/icons-material/Instagram'
 import EmailIcon from '@mui/icons-material/Email'
 import PhoneIphoneIcon from '@mui/icons-material/PhoneIphone'
 import LocationOnIcon from '@mui/icons-material/LocationOn'
+import FacebookIcon from "@mui/icons-material/Facebook";
 import Link from 'next/link'
 
 
@@ -63,7 +64,9 @@ const SOCIAL_LINKS = [
   { icon:<GitHubIcon sx={{ fontSize:'1.1rem', color:'rgba(255,255,255,.6)' }}/>, label:'GitHub',    href:'https://github.com/ahsancoderx'   },
   { icon:<LinkedInIcon sx={{ fontSize:'1.1rem', color:'rgba(255,255,255,.6)' }}/>, label:'LinkedIn',  href:'https://www.linkedin.com/in/ahsan-ali-mern-stack-developer/' },
   { icon:<MusicVideoIcon sx={{ fontSize:'1.1rem', color:'rgba(255,255,255,.6)' }}/>, label:'Tiktok',    href:'https://www.tiktok.com/@ahsantech74'  },
-  { icon:<InstagramIcon sx={{ fontSize:'1.1rem', color:'rgba(255,255,255,.6)' }}/>, label:'Instagram', href:'https://instagram.com'},
+  { icon:<FacebookIcon sx={{ fontSize:'1.1rem', color:'rgba(255,255,255,.6)' }}/>, label:'Facebook', href:'https://web.facebook.com/profile.php?id=61585395512662'},
+  {icon:<InstagramIcon sx={{fontSize:'1.1rem', color:'rgba(255,255,255,.6)'}}/>, label:'Instagram', href:'https://www.instagram.com/ahsan_tech1?igsh=MTZnanR0NDU2MHZx'}
+
 ]
 
 const CONTACT_ITEMS = [

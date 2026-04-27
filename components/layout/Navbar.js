@@ -4,6 +4,12 @@ import { useState, useEffect } from 'react'
 import { AppBar, Toolbar, Typography, Box, IconButton, Drawer } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
 import CloseIcon from '@mui/icons-material/Close'
+import HomeIcon from '@mui/icons-material/Home'
+import SettingsIcon from '@mui/icons-material/Settings'
+import DescriptionIcon from '@mui/icons-material/Description'
+import WorkIcon from '@mui/icons-material/Work'
+import EditIcon from '@mui/icons-material/Edit'
+import EmailIcon from '@mui/icons-material/Email'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
@@ -15,6 +21,8 @@ const NAV_LINKS = [
   { label: 'Blog',    href: '/blog',      section: 'blog'     },
   { label: 'Contact', href: '/#contact',  section: 'contact'  },
 ]
+
+const NAV_ICONS = [HomeIcon, SettingsIcon, DescriptionIcon, WorkIcon, EditIcon, EmailIcon]
 
 const NAV_CSS = `
   @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap');
@@ -91,7 +99,7 @@ export default function Navbar() {
         if (el && window.scrollY >= el.offsetTop - 120) { setActive(sec); break }
       }
     }
-    onScroll() // run once on mount
+    onScroll()
     window.addEventListener('scroll', onScroll)
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
@@ -120,7 +128,6 @@ export default function Navbar() {
         position="fixed"
         elevation={0}
         sx={{
-          // ✅ Always visible — semi-transparent at top, solid when scrolled
           background: scrolled
             ? 'rgba(10,10,10,0.97)'
             : 'rgba(10,10,10,0.55)',
@@ -204,7 +211,7 @@ export default function Navbar() {
         anchor="right"
         open={mobileOpen}
         onClose={() => setMobileOpen(false)}
-        PaperProps={{ sx: { background: '#0a0a0a', width: 280, borderLeft: '1px solid rgba(234,0,42,.15)' } }}
+        slotProps={{ paper: { sx: { background: '#0a0a0a', width: 280, borderLeft: '1px solid rgba(234,0,42,.15)' } } }}
       >
         <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', px: 3, py: 2.5, borderBottom: '1px solid rgba(255,255,255,.06)' }}>
@@ -217,25 +224,28 @@ export default function Navbar() {
           </Box>
 
           <Box sx={{ flex: 1, pt: 2 }}>
-            {NAV_LINKS.map((link, i) => (
-              <Link
-                key={link.label}
-                href={link.href}
-                className={`mobile-link${active === link.section ? ' active' : ''}`}
-                onClick={e => handleNavClick(e, link)}
-              >
-                <Box sx={{
-                  width: 28, height: 28, borderRadius: '7px',
-                  background: active === link.section ? 'rgba(234,0,42,.15)' : 'rgba(255,255,255,.04)',
-                  border: active === link.section ? '1px solid rgba(234,0,42,.3)' : '1px solid rgba(255,255,255,.06)',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  fontSize: '.7rem', flexShrink: 0,
-                }}>
-                  {['🏠', '⚙️', '📄', '💼', '✍️', '📩'][i]}
-                </Box>
-                {link.label}
-              </Link>
-            ))}
+            {NAV_LINKS.map((link, i) => {
+              const Icon = NAV_ICONS[i]
+              return (
+                <Link
+                  key={link.label}
+                  href={link.href}
+                  className={`mobile-link${active === link.section ? ' active' : ''}`}
+                  onClick={e => handleNavClick(e, link)}
+                >
+                  <Box sx={{
+                    width: 28, height: 28, borderRadius: '7px',
+                    background: active === link.section ? 'rgba(234,0,42,.15)' : 'rgba(255,255,255,.04)',
+                    border: active === link.section ? '1px solid rgba(234,0,42,.3)' : '1px solid rgba(255,255,255,.06)',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    flexShrink: 0,
+                  }}>
+                    <Icon sx={{ fontSize: '1rem', color: active === link.section ? '#EA002A' : '#666' }} />
+                  </Box>
+                  {link.label}
+                </Link>
+              )
+            })}
           </Box>
 
           <Box sx={{ p: 3, borderTop: '1px solid rgba(255,255,255,.06)' }}>

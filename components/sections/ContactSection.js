@@ -2,6 +2,13 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { Box, Container, Typography, CircularProgress } from '@mui/material'
+import PhoneIcon from '@mui/icons-material/Phone'
+import EmailIcon from '@mui/icons-material/Email'
+import LocationOnIcon from '@mui/icons-material/LocationOn'
+import WhatsAppIcon from '@mui/icons-material/WhatsApp'
+import SendIcon from '@mui/icons-material/Send'
+import CheckCircleIcon from '@mui/icons-material/CheckCircle'
+import WarningAmberIcon from '@mui/icons-material/WarningAmber'
 
 const CONTACT_CSS = `
   @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap');
@@ -18,7 +25,6 @@ const CONTACT_CSS = `
   @keyframes borderGlow    { 0%,100%{border-color:rgba(234,0,42,.2);} 50%{border-color:rgba(234,0,42,.6);} }
   @keyframes tagFloat      { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-4px);} }
 
-  /* scroll reveal */
   .ct-sr   { opacity:0; transform:translateY(36px); transition:opacity .8s ease,transform .8s ease; }
   .ct-sr-l { opacity:0; transform:translateX(-44px);transition:opacity .8s ease,transform .8s ease; }
   .ct-sr-r { opacity:0; transform:translateX(44px); transition:opacity .8s ease,transform .8s ease; }
@@ -26,7 +32,6 @@ const CONTACT_CSS = `
   .ct-d1{transition-delay:.06s} .ct-d2{transition-delay:.14s}
   .ct-d3{transition-delay:.22s} .ct-d4{transition-delay:.30s}
 
-  /* info card */
   .info-card {
     display:flex; align-items:center; gap:16px;
     padding:16px 20px; border-radius:14px;
@@ -48,12 +53,10 @@ const CONTACT_CSS = `
   }
   .info-card:hover::before { opacity:1; }
 
-  /* icon box */
   .info-icon {
     width:46px; height:46px; border-radius:12px; flex-shrink:0;
     background:rgba(234,0,42,.12); border:1px solid rgba(234,0,42,.3);
     display:flex; align-items:center; justify-content:center;
-    font-size:1.2rem;
     transition:background .3s, box-shadow .3s, transform .3s;
   }
   .info-card:hover .info-icon {
@@ -62,7 +65,6 @@ const CONTACT_CSS = `
     transform:rotate(-5deg) scale(1.1);
   }
 
-  /* form field */
   .ct-field {
     width:100%; background:rgba(255,255,255,.04);
     border:1px solid rgba(255,255,255,.09);
@@ -79,7 +81,6 @@ const CONTACT_CSS = `
   }
   .ct-field:hover:not(:focus) { border-color:rgba(255,255,255,.18); }
 
-  /* submit button */
   .ct-submit {
     width:100%; padding:14px 24px; border-radius:12px;
     border:none; cursor:pointer; position:relative; overflow:hidden;
@@ -103,20 +104,17 @@ const CONTACT_CSS = `
     pointer-events:none;
   }
 
-  /* label */
   .ct-label {
     font-family:'DM Sans'; font-size:.72rem; font-weight:700;
     color:#EA002A; letter-spacing:1.5px; text-transform:uppercase;
     margin-bottom:6px; display:block;
   }
 
-  /* success state */
   .success-wrap {
     text-align:center; padding:40px 20px;
     animation:successPop .6s cubic-bezier(.34,1.56,.64,1) forwards;
   }
 
-  /* social pill */
   .social-pill {
     display:inline-flex; align-items:center; gap:8px;
     padding:8px 16px; border-radius:30px;
@@ -132,35 +130,47 @@ const CONTACT_CSS = `
   }
 `
 
-const PARTICLES = Array.from({ length: 14 }, (_, i) => ({
-  id:i, top:`${Math.random()*100}%`, left:`${Math.random()*100}%`,
-  size:`${2+Math.random()*3}px`, delay:`${Math.random()*7}s`, dur:`${5+Math.random()*9}s`,
-}))
+const PARTICLES = [
+  { id:0,  top:'5%',  left:'8%',  size:'3px', delay:'0s',   dur:'6s'  },
+  { id:1,  top:'12%', left:'72%', size:'2px', delay:'1.2s', dur:'8s'  },
+  { id:2,  top:'22%', left:'45%', size:'4px', delay:'0.5s', dur:'7s'  },
+  { id:3,  top:'38%', left:'88%', size:'2px', delay:'2.1s', dur:'9s'  },
+  { id:4,  top:'45%', left:'15%', size:'3px', delay:'0.8s', dur:'5s'  },
+  { id:5,  top:'55%', left:'60%', size:'5px', delay:'1.7s', dur:'11s' },
+  { id:6,  top:'62%', left:'32%', size:'2px', delay:'3.0s', dur:'8s'  },
+  { id:7,  top:'70%', left:'90%', size:'3px', delay:'0.3s', dur:'6s'  },
+  { id:8,  top:'78%', left:'20%', size:'4px', delay:'2.5s', dur:'10s' },
+  { id:9,  top:'85%', left:'55%', size:'2px', delay:'1.0s', dur:'7s'  },
+  { id:10, top:'90%', left:'40%', size:'3px', delay:'0.6s', dur:'9s'  },
+  { id:11, top:'18%', left:'28%', size:'2px', delay:'4.0s', dur:'13s' },
+  { id:12, top:'30%', left:'75%', size:'4px', delay:'1.5s', dur:'8s'  },
+  { id:13, top:'50%', left:'82%', size:'2px', delay:'1.9s', dur:'12s' },
+]
 
 const CONTACT_INFO = [
   {
-    icon: '📞',
+    Icon: PhoneIcon,
     label: 'Phone',
     value: '+92 327 1348097',
     href: 'tel:+923271348097',
     sub: 'Tap to call directly',
   },
   {
-    icon: '✉️',
+    Icon: EmailIcon,
     label: 'Email',
     value: 'ahsanalitech7@gmail.com',
     href: 'mailto:ahsanalitech7@gmail.com',
     sub: 'Tap to open Gmail',
   },
   {
-    icon: '📍',
+    Icon: LocationOnIcon,
     label: 'Location',
     value: 'Lahore, Pakistan',
     href: 'https://maps.google.com/?q=Lahore,Pakistan',
     sub: 'Open in Google Maps',
   },
   {
-    icon: '💬',
+    Icon: WhatsAppIcon,
     label: 'WhatsApp',
     value: '+92 327 1348097',
     href: 'https://wa.me/923271348097?text=Hi%20Ahsan!%20I%20visited%20your%20portfolio.',
@@ -177,7 +187,6 @@ export default function ContactSection() {
   const [error, setError]     = useState('')
   const btnRef = useRef(null)
 
-  // scroll reveal
   useEffect(() => {
     const io = new IntersectionObserver(
       entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in') }),
@@ -189,7 +198,6 @@ export default function ContactSection() {
 
   const set = (k) => (e) => setForm(f => ({ ...f, [k]: e.target.value }))
 
-  // ripple effect on button click
   const addRipple = (e) => {
     const btn = btnRef.current
     if (!btn) return
@@ -206,7 +214,6 @@ export default function ContactSection() {
     e.preventDefault()
     setLoading(true)
     setError('')
-
     try {
       const res  = await fetch('/api/contact', {
         method: 'POST',
@@ -293,7 +300,9 @@ export default function ContactSection() {
                     rel={item.href?.startsWith('http') ? 'noopener noreferrer' : undefined}
                     className={`info-card ct-sr-l ct-d${i+1}`}
                   >
-                    <Box className="info-icon">{item.icon}</Box>
+                    <Box className="info-icon">
+                      <item.Icon sx={{ fontSize:'1.25rem', color:'#EA002A' }}/>
+                    </Box>
                     <Box sx={{ flex:1, minWidth:0 }}>
                       <Typography sx={{ fontFamily:"'DM Sans'", fontSize:'.65rem', fontWeight:700, color:'#EA002A', letterSpacing:'1.5px', textTransform:'uppercase', mb:.2 }}>
                         {item.label}
@@ -334,17 +343,13 @@ export default function ContactSection() {
                 position:'relative', overflow:'hidden',
                 animation:'borderGlow 4s ease-in-out infinite',
               }}>
-                {/* scan line */}
                 <Box sx={{ position:'absolute', left:0, right:0, height:'2px', background:'linear-gradient(90deg,transparent,rgba(234,0,42,.4),transparent)', top:'-5%', animation:'scanLine 6s linear infinite', pointerEvents:'none', zIndex:2 }}/>
-
-                {/* corner glow */}
                 <Box sx={{ position:'absolute', top:-30, right:-30, width:100, height:100, borderRadius:'50%', background:'rgba(234,0,42,.12)', filter:'blur(30px)' }}/>
                 <Box sx={{ position:'absolute', bottom:-30, left:-30, width:80, height:80, borderRadius:'50%', background:'rgba(234,0,42,.08)', filter:'blur(24px)' }}/>
 
                 {success ? (
-                  /* ── SUCCESS STATE ── */
                   <Box className="success-wrap">
-                    <Box sx={{ fontSize:'4rem', mb:2, display:'block' }}>✅</Box>
+                    <CheckCircleIcon sx={{ fontSize:'4rem', color:'#22c55e', mb:2, display:'block', mx:'auto' }}/>
                     <Typography sx={{ fontFamily:"'Syne'", fontWeight:800, color:'#fff', fontSize:'1.5rem', mb:1 }}>
                       Message Sent!
                     </Typography>
@@ -360,7 +365,6 @@ export default function ContactSection() {
                     </button>
                   </Box>
                 ) : (
-                  /* ── FORM ── */
                   <>
                     <Typography sx={{ fontFamily:"'Syne'", fontWeight:800, color:'#fff', fontSize:'1.3rem', mb:.5, letterSpacing:'-.3px' }}>
                       Send a Message
@@ -371,7 +375,6 @@ export default function ContactSection() {
 
                     <form onSubmit={handleSubmit} style={{ position:'relative', zIndex:1 }}>
 
-                      {/* row 1 */}
                       <Box sx={{ display:'flex', gap:2, flexDirection:{ xs:'column', sm:'row' }, mb:2 }}>
                         <Box sx={{ flex:1 }}>
                           <label className="ct-label">Full Name *</label>
@@ -383,7 +386,6 @@ export default function ContactSection() {
                         </Box>
                       </Box>
 
-                      {/* row 2 */}
                       <Box sx={{ display:'flex', gap:2, flexDirection:{ xs:'column', sm:'row' }, mb:2 }}>
                         <Box sx={{ flex:1 }}>
                           <label className="ct-label">Phone Number</label>
@@ -395,22 +397,22 @@ export default function ContactSection() {
                         </Box>
                       </Box>
 
-                      {/* message */}
                       <Box sx={{ mb:2.5 }}>
                         <label className="ct-label">Your Message *</label>
                         <textarea className="ct-field" rows={5} placeholder="Tell me about your project, goals, budget and timeline…" value={form.message} onChange={set('message')} required/>
                       </Box>
 
-                      {/* error */}
                       {error && (
                         <Box sx={{ mb:2, p:1.5, borderRadius:'10px', background:'rgba(234,0,42,.1)', border:'1px solid rgba(234,0,42,.3)' }}>
-                          <Typography sx={{ fontFamily:"'DM Sans'", color:'#ff6b6b', fontSize:'.84rem' }}>
-                            ⚠️ {error}
-                          </Typography>
+                          <Box sx={{ display:'flex', alignItems:'center', gap:1 }}>
+                            <WarningAmberIcon sx={{ color:'#ff6b6b', fontSize:'1rem' }}/>
+                            <Typography sx={{ fontFamily:"'DM Sans'", color:'#ff6b6b', fontSize:'.84rem' }}>
+                              {error}
+                            </Typography>
+                          </Box>
                         </Box>
                       )}
 
-                      {/* submit */}
                       <button
                         ref={btnRef}
                         type="submit"
@@ -423,7 +425,10 @@ export default function ContactSection() {
                               <CircularProgress size={18} sx={{ color:'#fff' }}/>
                               <span>Sending…</span>
                             </Box>
-                          : '🚀 Send Message'
+                          : <Box sx={{ display:'flex', alignItems:'center', gap:1, justifyContent:'center' }}>
+                              <SendIcon sx={{ fontSize:'1rem' }}/>
+                              <span>Send Message</span>
+                            </Box>
                         }
                       </button>
                     </form>
@@ -434,7 +439,6 @@ export default function ContactSection() {
           </Box>
         </Container>
 
-        {/* bottom divider */}
         <Box sx={{ position:'absolute', bottom:-1, left:0, width:'100%', overflow:'hidden', lineHeight:0, zIndex:3 }}>
           <svg viewBox="0 0 1440 60" preserveAspectRatio="none" style={{ height:60, width:'100%' }}>
             <polygon points="0,60 1440,0 1440,60" fill="#0a0a0a"/>
