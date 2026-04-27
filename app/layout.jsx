@@ -4,18 +4,78 @@ import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import theme from '@/theme/theme';
 import CustomCursor from '@/components/layout/CustomCursor';
-import WhatsAppButton from '@/components/sections/WhatsAppButton';   // ← ADD THIS
+import WhatsAppButton from '@/components/sections/WhatsAppButton';   
 
 export const metadata = {
-  title: 'Ahsan Ali | Frontend Developer & SEO Expert',
+  title: "Ahsan Ali | MERN Stack Developer | AI Engineer | Frontend Developer & SEO Expert",
+  
   description:
-    'I design and build modern, responsive websites that bring ideas to life. Clean code, creative design, user-friendly experiences.',
-  keywords: 'Ahsan Ali, Frontend Developer, React, Next.js, SEO, Web Development, Lahore',
-  openGraph: {
-    title: 'Ahsan Ali | Frontend Developer',
-    description: 'Portfolio of Ahsan Ali – Frontend Developer & SEO Expert based in Lahore.',
-    type: 'website',
+    "Ahsan Ali is a Full Stack MERN Developer, AI Enthusiast, and SEO Expert based in Lahore, Pakistan. Specialized in Next.js, React.js, Node.js, MongoDB, AI Chatbots, Voice Agents, OpenAI API, Gemini API, and technical SEO. Building scalable, high-performance web applications and intelligent AI-powered digital solutions.",
+  
+  keywords: [
+    "Ahsan Ali",
+    "MERN Stack Developer",
+    "Full Stack Developer Pakistan",
+    "Frontend Developer Lahore",
+    "React Developer",
+    "Next.js Developer",
+    "Node.js Developer",
+    "MongoDB Developer",
+    "AI Engineer",
+    "AI Chatbot Developer",
+    "Voice Agent Developer",
+    "OpenAI API Developer",
+    "Gemini API Integration",
+    "Prompt Engineer",
+    "SEO Expert Pakistan",
+    "Technical SEO",
+    "Web Developer Lahore",
+    "JavaScript Developer",
+    "Python Developer",
+    "Portfolio Website"
+  ],
+
+  authors: [{ name: "Ahsan Ali" }],
+  creator: "Ahsan Ali",
+  publisher: "Ahsan Ali",
+
+  metadataBase: new URL("https://yourdomain.com"),
+
+  alternates: {
+    canonical: "https://yourdomain.com",
   },
+
+  openGraph: {
+    title: "Ahsan Ali | MERN Stack Developer & AI Engineer",
+    description:
+      "Portfolio of Ahsan Ali — Full Stack MERN Developer, AI Engineer, and SEO Expert. Building scalable web apps, AI chatbots, voice agents, and SEO-optimized digital experiences.",
+    url: "https://yourdomain.com",
+    siteName: "Ahsan Ali Portfolio",
+    locale: "en_US",
+    type: "website",
+  },
+
+  twitter: {
+    card: "summary_large_image",
+    title: "Ahsan Ali | MERN Stack Developer & AI Engineer",
+    description:
+      "Full Stack MERN Developer specializing in AI chatbots, voice agents, Next.js applications, and SEO optimization.",
+  },
+
+  robots: {
+    index: true,
+    follow: true,
+    nocache: false,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+
+  category: "Technology",
 };
 
 export default function RootLayout({ children }) {
