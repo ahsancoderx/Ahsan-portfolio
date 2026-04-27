@@ -39,17 +39,17 @@ export const metadata = {
   creator: "Ahsan Ali",
   publisher: "Ahsan Ali",
 
-  metadataBase: new URL("https://yourdomain.com"),
+  metadataBase: new URL("https://ahsanali-dev.vercel.app/"),
 
   alternates: {
-    canonical: "https://yourdomain.com",
+    canonical: "https://ahsanali-dev.vercel.app/",
   },
 
   openGraph: {
     title: "Ahsan Ali | MERN Stack Developer & AI Engineer",
     description:
       "Portfolio of Ahsan Ali — Full Stack MERN Developer, AI Engineer, and SEO Expert. Building scalable web apps, AI chatbots, voice agents, and SEO-optimized digital experiences.",
-    url: "https://yourdomain.com",
+    url: "https://ahsanali-dev.vercel.app/",
     siteName: "Ahsan Ali Portfolio",
     locale: "en_US",
     type: "website",
