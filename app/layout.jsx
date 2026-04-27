@@ -7,7 +7,7 @@ import CustomCursor from '@/components/layout/CustomCursor';
 import WhatsAppButton from '@/components/sections/WhatsAppButton';   
 
 export const metadata = {
-  title: "Ahsan Ali | MERN Stack Developer | AI Engineer | Frontend Developer & SEO Expert",
+  title: "Ahsan Ali | MERN Stack Developer | AI Engineer | Frontend Developer & Backend developer",
   
   description:
     "Ahsan Ali is a Full Stack MERN Developer, AI Enthusiast, and SEO Expert based in Lahore, Pakistan. Specialized in Next.js, React.js, Node.js, MongoDB, AI Chatbots, Voice Agents, OpenAI API, Gemini API, and technical SEO. Building scalable, high-performance web applications and intelligent AI-powered digital solutions.",
