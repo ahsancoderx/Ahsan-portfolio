@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+  <!-- Static Pages -->
+  <url>
+    <loc>https://ahsanali-dev.vercel.app/</loc>
+    <lastmod>2025-04-28</lastmod>
+  </url>
+  <url>
+    <loc>https://ahsanali-dev.vercel.app/blog</loc>
+    <lastmod>2025-04-28</lastmod>
+  </url>
+  <url>
+    <loc>https://ahsanali-dev.vercel.app/projects</loc>
+    <lastmod>2025-04-28</lastmod>
+  </url>
+  <url>
+    <loc>https://ahsanali-dev.vercel.app/services</loc>
+    <lastmod>2025-04-28</lastmod>
+  </url>
+
+  <!-- Blog Posts -->
+  <url>
+    <loc>https://ahsanali-dev.vercel.app/blog/nextjs-seo-guide</loc>
+    <lastmod>2025-04-28</lastmod>
+  </url>
+  <url>
+    <loc>https://ahsanali-dev.vercel.app/blog/react-performance-tips</loc>
+    <lastmod>2025-04-28</lastmod>
+  </url>
+  <url>
+    <loc>https://ahsanali-dev.vercel.app/blog/mongodb-best-practices</loc>
+    <lastmod>2025-04-28</lastmod>
+  </url>
+  <url>
+    <loc>https://ahsanali-dev.vercel.app/blog/tailwind-vs-mui</loc>
+    <lastmod>2025-04-28</lastmod>
+  </url>
+  <url>
+    <loc>https://ahsanali-dev.vercel.app/blog/freelancing-guide</loc>
+    <lastmod>2025-04-28</lastmod>
+  </url>
+  <url>
+    <loc>https://ahsanali-dev.vercel.app/blog/javascript-async-guide</loc>
+    <lastmod>2025-04-28</lastmod>
+  </url>
+
+  <!-- Projects -->
+  <url>
+    <loc>https://ahsanali-dev.vercel.app/projects/ecommerce-platform</loc>
+    <lastmod>2025-04-28</lastmod>
+  </url>
+  <url>
+    <loc>https://ahsanali-dev.vercel.app/projects/Full-stack-SkillReel</loc>
+    <lastmod>2025-04-28</lastmod>
+  </url>
+  <url>
+    <loc>https://ahsanali-dev.vercel.app/projects/Full-stack-dental</loc>
+    <lastmod>2025-04-28</lastmod>
+  </url>
+  <url>
+    <loc>https://ahsanali-dev.vercel.app/projects/AI-IVoice-agent</loc>
+    <lastmod>2025-04-28</lastmod>
+  </url>
+  <url>
+    <loc>https://ahsanali-dev.vercel.app/projects/RAG-System</loc>
+    <lastmod>2025-04-28</lastmod>
+  </url>
+  <url>
+    <loc>https://ahsanali-dev.vercel.app/projects/Blog-Application</loc>
+    <lastmod>2025-04-28</lastmod>
+  </url>
+
+  <!-- Services -->
+  <url>
+    <loc>https://ahsanali-dev.vercel.app/services/Full-stack</loc>
+    <lastmod>2025-04-28</lastmod>
+  </url>
+  <url>
+    <loc>https://ahsanali-dev.vercel.app/services/backend-development</loc>
+    <lastmod>2025-04-28</lastmod>
+  </url>
+  <url>
+    <loc>https://ahsanali-dev.vercel.app/services/ui-ux-design</loc>
+    <lastmod>2025-04-28</lastmod>
+  </url>
+  <url>
+    <loc>https://ahsanali-dev.vercel.app/services/frontend-development</loc>
+    <lastmod>2025-04-28</lastmod>
+  </url>
+  <url>
+    <loc>https://ahsanali-dev.vercel.app/services/ai-ml-engineer</loc>
+    <lastmod>2025-04-28</lastmod>
+  </url>
+  <url>
+    <loc>https://ahsanali-dev.vercel.app/services/chatbot-development</loc>
+    <lastmod>2025-04-28</lastmod>
+  </url>
+
+</urlset>
