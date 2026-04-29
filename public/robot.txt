@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://ahsanali-dev.vercel.app/sitemap.xml
