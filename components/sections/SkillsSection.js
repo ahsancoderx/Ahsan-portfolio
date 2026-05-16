@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useRef } from 'react'
 import { Box, Container, Typography } from '@mui/material'
+import { delay } from 'framer-motion'
 
 // ─── CSS ──────────────────────────────────────────────────────────────────────
 const SKILLS_CSS = `
@@ -165,6 +166,8 @@ const ALL_SKILLS = [
   { name:'Git / GitHub', proficiency:84, category:'tools',    bg:'linear-gradient(135deg,#1b1f23,#f05032)', icon:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg' },
   { name:'Figma',        proficiency:78, category:'design',   bg:'linear-gradient(135deg,#1e1e1e,#a259ff)', icon:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg' },
   { name:'Matrial UI',    proficiency:72, category:'design',   bg:'linear-gradient(135deg,#001e36,#31a8ff)', icon:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/materialui/materialui-original.svg' },
+  {name : 'Django' , proficiency:75, category:'backend', bg:'linear-gradient(135deg,#092E20,#44B78B)', icon:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/django/django-plain.svg' },
+  {name:'Flask', proficiency:80, category:'backend',bg:'linear-gradient(135deg,#000000,#4b4b4b)', icon:'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/flask/flask-original.svg'}
 ]
 
 const CATEGORIES = ['all','frontend','backend','database','tools','design']
@@ -186,6 +189,7 @@ const PARTICLES = [
   { id:13, top:'50%', left:'82%', size:'2px', delay:'2.8s', dur:'6s'  },
   { id:14, top:'65%', left:'12%', size:'3px', delay:'3.5s', dur:'7s'  },
   { id:15, top:'75%', left:'50%', size:'2px', delay:'1.9s', dur:'12s' },
+  {id:16, top:'75%', left:'60%', size:'2px', delay:"2.8s", dur:'13s'}
 ]
 
 // ─── 3-D Skill Card ───────────────────────────────────────────────────────────
