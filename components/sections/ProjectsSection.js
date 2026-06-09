@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import { Box, Container, Typography } from '@mui/material'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import { lightBlue } from '@mui/material/colors'
 
 const PROJ_CSS = `
   @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap');
@@ -136,6 +137,20 @@ export const PROJECTS = [
     githubUrl: 'https://github.com/ahsancoderx/social-media-project',
     videoUrl: null, year: '2025', status: 'Live',
   },
+  {
+    id:"khata-pakistan",
+    title:"khata-pakistan-mobile-app",
+    subtitle:"Accounting Software for Small Businesses",
+    description:"A comprehensive accounting software designed for small businesses in Pakistan, built with React.js, Node.js, Express.js, and MongoDB to streamline financial management and reporting.",
+    category:'SaaS', featured:false,
+    image:"/project-pic/khata-pakistan-mobile-app.png",
+    fallbackColor:'linear-gradient(135deg,#0a0a1a 0%,#0d0d2d 50%,#060615 100%)',
+    tags:["React-native", "Supabase", "Material Ui"],
+    liveUrl:"https://www.linkedin.com/posts/ahsan-ali-mern-stack-developer_khatapakistan-reactnative-expo-ugcPost-7469350901506469888-sFiK/?utm_source=share&utm_medium=member_desktop&rcm=ACoAAEyrDa8B_mTI9QWxsh4grrVsnnIN2GbIlus",
+    githubUrl:"https://github.com/ahsancoderx/pakistan_khata",
+    videoUrl:null, year:'2026', status:'Live',
+  },
+
   {
     id: 'CVStudio',
     title: 'Full-stack-CV-Studio',
